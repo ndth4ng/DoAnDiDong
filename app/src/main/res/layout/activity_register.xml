@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register"
+    android:background="#fafafa">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="Đăng kí"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/layout">
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Nhập tên"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Nhập email"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Nhập mật khẩu"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtConfirm"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Xác nhận mật khẩu"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtAddress"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Địa chỉ"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtPhone"
+            android:layout_width="325dp"
+            android:layout_height="50dp"
+            android:hint="Số điện thoại"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="325dp"
+        android:layout_height="60dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout"
+        android:text="Đăng kí"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#Fafafa"
+        android:background="@drawable/custom_edittext_btn"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:id="@+id/login_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+        android:text="Đã có tài khoản ? Đăng nhập"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="#6C63FF"
+        android:layout_marginTop="10dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

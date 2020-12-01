@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1037832270013",
+    "firebase_url": "https://shop-c590c.firebaseio.com",
+    "project_id": "shop-c590c",
+    "storage_bucket": "shop-c590c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037832270013:android:9860b91484bc39dc3247d4",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037832270013-kqaqvkdgonrg8o66c73akrf3t7gdjnfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhW-2ueJ6yzQpwJP9xQrZLBR9EKB5wq60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037832270013-kqaqvkdgonrg8o66c73akrf3t7gdjnfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

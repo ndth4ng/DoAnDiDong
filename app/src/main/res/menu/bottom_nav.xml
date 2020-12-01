@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home"
+        android:title="Trang chủ" />
+    <item
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:id="@+id/wishlist"
+        android:title="Yêu thích"
+        />
+    <item
+        android:icon="@drawable/search"
+        android:id="@+id/search"
+        android:title="Tìm kiếm"
+        />
+    <item
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:id="@+id/cart"
+        android:title="Giỏ hàng"
+        />
+</menu>
