@@ -4,7 +4,8 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/home"
-        android:title="Trang chủ" />
+        android:title="Trang chủ"
+        />
     <item
         android:icon="@drawable/ic_baseline_favorite_24"
         android:id="@+id/wishlist"

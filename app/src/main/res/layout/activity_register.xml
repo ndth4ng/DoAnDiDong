@@ -89,7 +89,7 @@
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="325dp"
-        android:layout_height="60dp"
+        android:layout_height="73dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout"
@@ -98,7 +98,7 @@
         android:textStyle="bold"
         android:textColor="#Fafafa"
         android:background="@drawable/custom_edittext_btn"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="50dp" />
 
     <TextView
         android:id="@+id/login_register"

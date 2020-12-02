@@ -7,35 +7,10 @@
     tools:context=".User"
     android:background="#f5f5f5">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons1"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:background="#fafafa">
-        <ImageView
-            android:id="@+id/avt"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/user"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-        <TextView
-            android:id="@+id/name_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/avt"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="Tú Hà"
-            android:textStyle="bold"
-            android:layout_marginTop="120dp"
-            android:textSize="25sp"
-            android:textColor="#000000"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        layout="@layout/action_bar"
+        android:id="@+id/acction_bar"/>
+
     <ImageView
         android:id="@+id/back"
         android:layout_width="25dp"
@@ -44,118 +19,117 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"/>
-    <ImageView
-        android:id="@+id/setting"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/ic_baseline_settings_24"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        />
+        android:layout_marginLeft="20dp" />
+    <!--
+        <ImageView
+            android:id="@+id/setting"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_baseline_settings_24"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            />-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="360dp"
-        android:layout_height="200dp"
+    <ImageView
+        android:id="@+id/avt"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:background="@drawable/user"
+
+        app:layout_constraintBottom_toTopOf="@id/layout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/avt"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cons1"
-        android:layout_marginTop="350dp"
-        android:background="@drawable/custom_info_user">
-        <LinearLayout
-            android:id="@+id/Lemail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email:"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#000000"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/Laddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/Lemail"
-            android:layout_marginTop="40dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Địa chỉ:"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#000000"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/Lphonenum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/Laddress"
-            android:layout_marginTop="40dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Số điện thoại:"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
-            <TextView
-                android:id="@+id/sdt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#000000"/>
-        </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/Rhistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/Lphonenum"
-            android:layout_marginTop="40dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lịch sử mua hàng:"
-                android:textSize="20sp"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:drawableRight="@drawable/ic_baseline_navigate_next_24"
-                />
-        </RelativeLayout>
+        android:text="Tú Hà"
+        android:textStyle="bold"
+        android:layout_marginTop="120dp"
+        android:textSize="25sp"
+        android:textColor="#000000"/>
+
+    <LinearLayout
+        android:id="@id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@id/logout"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="20dp"
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aaaaaaaaaa"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại:"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"/>
+        <TextView
+            android:id="@+id/sdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aaaaaaa"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ:"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aaaaaaaaaaa"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/RHistoryy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Về chúng tôi"
+            android:text="Lịch sử mua hàng:"
             android:textSize="20sp"
             android:textColor="#000000"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Rhistory"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            android:drawableRight="@drawable/ic_baseline_navigate_next_24" />
+
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/logout"
