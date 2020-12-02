@@ -68,7 +68,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email:"
@@ -76,15 +75,14 @@
             android:textColor="#000000"/>
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="aaaaaaaaaa"
+            android:text=""
             android:layout_marginTop="5dp"
             android:textColor="#000000"/>
 
         <TextView
-            android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Số điện thoại:"
@@ -92,15 +90,14 @@
             android:layout_marginTop="10dp"
             android:textColor="#000000"/>
         <TextView
-            android:id="@+id/sdt"
+            android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="aaaaaaa"
+            android:text=""
             android:layout_marginTop="5dp"
             android:textColor="#000000"/>
 
         <TextView
-            android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Địa chỉ:"
@@ -109,10 +106,10 @@
             android:textColor="#000000"/>
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="aaaaaaaaaaa"
+            android:text=""
             android:layout_marginTop="5dp"
             android:textColor="#000000"/>
 
