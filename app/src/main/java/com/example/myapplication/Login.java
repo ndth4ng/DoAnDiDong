@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
     FirebaseAuth fAuth;
@@ -29,10 +30,16 @@ public class Login extends AppCompatActivity {
 
         AnhXa();
 
-        if (fAuth.getCurrentUser() != null) {
+        FirebaseUser user = fAuth.getCurrentUser();
+
+        if (user != null) {
+            Toast.makeText(this,"Bạn đã đăng nhập từ trước.",Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
+        } else {
+            Toast.makeText(this,"Hãy đăng nhập.",Toast.LENGTH_SHORT).show();
         }
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +84,9 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),Register.class));
+                finish();
             }
         });
-
-
-
     }
 
     protected void AnhXa() {

@@ -51,10 +51,6 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*Intent intent = new Intent(Register.this, MainActivity.class);
-                startActivity(intent);
-                finish();*/
-
                 final String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
                 final String name = edtName.getText().toString();

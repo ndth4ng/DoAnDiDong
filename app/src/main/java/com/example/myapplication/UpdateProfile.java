@@ -91,6 +91,11 @@ public class UpdateProfile extends AppCompatActivity {
         });
     }
 
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), User.class));
+        finish();
+    }
+
     protected void AnhXa() {
         close = findViewById(R.id.close);
         tvName = findViewById(R.id.tvName);

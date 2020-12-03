@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,9 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -30,7 +33,7 @@ public class User extends AppCompatActivity {
 
     ImageView back;
     Button btnLogOut;
-    TextView history, tvName,tvEmail, tvAddress, tvPhone;
+    TextView history, tvName, tvEmail, tvAddress, tvPhone;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
@@ -47,17 +50,22 @@ public class User extends AppCompatActivity {
 
         userId = fAuth.getCurrentUser().getUid();
 
+        //final FirebaseUser user = fAuth.getCurrentUser();
+
         DocumentReference documentReference = fStore.collection("users").document(userId);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
-                tvName.setText(documentSnapshot.getString("Tên"));
-                tvEmail.setText(documentSnapshot.getString("Email"));
-                tvAddress.setText(documentSnapshot.getString("Địa chỉ"));
-                tvPhone.setText(documentSnapshot.getString("Số điện thoại"));
+                if (documentSnapshot.exists()) {
+                    tvName.setText(documentSnapshot.getString("Tên"));
+                    tvEmail.setText(documentSnapshot.getString("Email"));
+                    tvAddress.setText(documentSnapshot.getString("Địa chỉ"));
+                    tvPhone.setText(documentSnapshot.getString("Số điện thoại"));
+                } else {
+                    Log.d("tag", " onEvent: Document do not exist.");
+                }
             }
         });
-
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +88,12 @@ public class User extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public void logout(View v) {
+        FirebaseAuth.getInstance().signOut();
+        finishAffinity();
+        startActivity(new Intent(getApplicationContext(), Login.class));
     }
 
     protected void AnhXa() {
@@ -109,29 +123,22 @@ public class User extends AppCompatActivity {
             case R.id.changeProfile:
                 // Cập nhật thông tin
                 //startActivity(new Intent(getApplicationContext(),UpdateProfile.class));
-                Intent i = new Intent(getApplicationContext(),UpdateProfile.class);
-                i.putExtra("email",tvEmail.getText());
-                i.putExtra("name",tvName.getText());
-                i.putExtra("address",tvAddress.getText());
-                i.putExtra("phone",tvPhone.getText());
+                Intent i = new Intent(getApplicationContext(), UpdateProfile.class);
+                i.putExtra("email", tvEmail.getText());
+                i.putExtra("name", tvName.getText());
+                i.putExtra("address", tvAddress.getText());
+                i.putExtra("phone", tvPhone.getText());
                 startActivity(i);
+                finish();
                 break;
             case R.id.changePassword:
                 // Cập nhật mật khẩu
-                startActivity(new Intent(getApplicationContext(),UpdatePassword.class));
+                startActivity(new Intent(getApplicationContext(), UpdatePassword.class));
+                finish();
                 break;
             default:
                 // ...
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
-        finishAffinity(); // Tắt toàn bộ Activity đang chạy
-        Intent intent = new Intent(getApplicationContext(),Login.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
     }
 }
