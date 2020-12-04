@@ -1,40 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="185dp"
-    android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
 
-    <ImageView
-        android:id="@+id/imageViewCategories"
-        android:layout_width="185dp"
-        android:layout_height="229dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:src="@drawable/ao"
-        android:scaleType="centerCrop"
-        />
-    <TextView
-        android:id="@+id/nameCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Áo"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/imageViewCategories"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-    <TextView
-        android:id="@+id/priceCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="100.000đ"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/nameCategories"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@id/main_layout"
+        app:layout_constraintLeft_toLeftOf="@id/main_layout"
+        app:layout_constraintRight_toRightOf="@id/main_layout"
+        app:layout_constraintTop_toTopOf="@id/main_layout"
+        >
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ao" />
+
+            <TextView
+                android:id="@+id/nameProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Áo thun trơn trắng"
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/priceProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="100.000đ"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

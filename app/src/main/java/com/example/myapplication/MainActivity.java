@@ -10,10 +10,13 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
@@ -26,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     ImageButton user;
     ImageButton menu_left;
     DrawerLayout drawerLayout;
-    Toolbar toolbar;
     NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AnhXa();
+
+        actionToolBar();
+
+        drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -54,23 +61,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-       actionToolBar();
     }
     void actionToolBar(){
         menu_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
+                drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            drawerLayout.closeDrawer(Gravity.LEFT);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 
     void AnhXa(){
         user = findViewById(R.id.user);
-        drawerLayout = findViewById(R.id.drawableLayout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         menu_left = findViewById(R.id.menu_left);
     }
     private NavigationView.OnNavigationItemSelectedListener navigation =
@@ -79,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.aoNam: {
-                            Intent intent = new Intent(MainActivity.this, Categories.class);
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
                             startActivity(intent);
                             break;
                         }
@@ -107,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override

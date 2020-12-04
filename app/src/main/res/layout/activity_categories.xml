@@ -15,11 +15,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"/>
-    <GridView
-        android:id="@+id/gridviewCategories"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2"
         android:layout_marginTop="50dp"
-        />
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="178dp"
+        tools:listitem="@layout/cell_product"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

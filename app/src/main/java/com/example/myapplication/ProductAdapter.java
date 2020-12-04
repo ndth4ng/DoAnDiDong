@@ -4,73 +4,63 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
-public class ProductAdapter extends BaseAdapter {
-
-
-    @Override
-    public int getCount() {
-        return productList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    LayoutInflater inflater;
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+    // List sản phẩm
+    private ArrayList<Product> listProduct;
+    // Lưu context đê dễ truy cập
     private Context context;
-    int layout;
-    private List<Product> productList;
-    ArrayList<Product> arrayList;
 
-    public ProductAdapter(Context context, int layout, List<Product> productList) {
+    public ProductAdapter(Context context, ArrayList<Product> listProduct) {
+        this.listProduct = listProduct;
         this.context = context;
-        this.layout = layout;
-        this.productList = productList;
-    }
-    public ProductAdapter(Context context, ArrayList<Product> list) {
-        this.context = context;
-        this.arrayList = list;
-        inflater = LayoutInflater.from(context);
-    }
-    private class ViewHolder{
-        ImageView img;
-        TextView tv_name, tv_price;
-
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ProductAdapter.ViewHolder holder;
+    @NonNull
+    @Override
+    public ProductAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // gán view
+        View view = LayoutInflater.from(context).inflate(R.layout.cell_product, parent, false);
+        return new ViewHolder(view);
+    }
 
-        if (convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
-            holder = new ViewHolder();
-            //ánh xạ view
-            holder.tv_name = convertView.findViewById(R.id.nameCategories);
-            holder.tv_price = convertView.findViewById(R.id.priceCategories);
-            holder.img = convertView.findViewById(R.id.imageViewCategories);
-            convertView.setTag(holder);
+    @Override
+    public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder holder, int position) {
+        // Gan du lieu
+        Product product = listProduct.get(position);
+        holder.nameProduct.setText(product.getName());
+        Locale locale = new Locale("vn","VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        holder.priceProduct.setText(currencyFormatter.format(product.getPrice()));
+        holder.imgProduct.setImageResource(product.getImage());
+    }
+
+    @Override
+    public int getItemCount() {
+        return listProduct.size(); // tra ve item tai vi tri posision
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgProduct;
+        TextView nameProduct, priceProduct;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            // Anh xa
+
+            imgProduct = itemView.findViewById(R.id.imageProduct);
+            nameProduct = itemView.findViewById(R.id.nameProduct);
+            priceProduct = itemView.findViewById(R.id.priceProduct);
         }
-        else {
-            holder = (ProductAdapter.ViewHolder) convertView.getTag();
-        }
-        Product furniture = productList.get(position);
-        holder.tv_name.setText(furniture.getName());
-        holder.tv_price.setText(furniture.getPrice());
-        holder.img.setImageResource(furniture.getImage());
-        return convertView;
     }
 }
