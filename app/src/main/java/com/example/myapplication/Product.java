@@ -2,14 +2,58 @@ package com.example.myapplication;
 
 public class Product {
 
-    private String name;
-    private int price;
-    private int image;
+    public String getItemId() {
+        return itemId;
+    }
 
-    public Product(String name, int price, int image) {
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    private String itemId;
+    private String cate;
+    private String detail;
+    private String image;
+    private String name;
+    private long price;
+
+    public String getCate() {
+        return cate;
+    }
+
+    public void setCate(String cate) {
+        this.cate = cate;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Product() {}
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Product(String cate, String detail, String image, String name, long price, String itemId) {
+        this.cate = cate;
+        this.detail = detail;
+        this.image = image;
         this.name = name;
         this.price = price;
-        this.image = image;
+        this.itemId = itemId;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public String getName() {
@@ -20,23 +64,7 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice() {
+    public long getPrice() {
         return price;
     }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
-    }
-
-
-
-
 }

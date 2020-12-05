@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Locale locale = new Locale("vn","VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         holder.priceProduct.setText(currencyFormatter.format(product.getPrice()));
-        holder.imgProduct.setImageResource(product.getImage());
+        //holder.imgProduct.setImageURI(product.getImage());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             // Anh xa
 
-            imgProduct = itemView.findViewById(R.id.imageProduct);
+            //imgProduct = itemView.findViewById(R.id.imageProduct);
             nameProduct = itemView.findViewById(R.id.nameProduct);
             priceProduct = itemView.findViewById(R.id.priceProduct);
         }
