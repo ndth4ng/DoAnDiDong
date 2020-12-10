@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
-                        case R.id.aoNam: {
+                        case R.id.tshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             startActivity(intent);
                             break;
                         }
-                        case R.id.quanNam: {
+                       /* case R.id.quanNam: {
                             Intent intent = new Intent(MainActivity.this, Categories.class);
                             startActivity(intent);
                             break;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, Categories.class);
                             startActivity(intent);
                             break;
-                        }
+                        }*/
                     }
                     return true;
                 }

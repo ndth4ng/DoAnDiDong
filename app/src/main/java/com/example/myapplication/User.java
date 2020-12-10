@@ -129,7 +129,6 @@ public class User extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.changeProfile:
                 // Cập nhật thông tin
-                //startActivity(new Intent(getApplicationContext(),UpdateProfile.class));
                 Intent i = new Intent(getApplicationContext(), UpdateProfile.class);
                 i.putExtra("email", tvEmail.getText());
                 i.putExtra("name", tvName.getText());

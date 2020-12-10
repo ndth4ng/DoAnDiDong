@@ -3,28 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Nam">
+    <item android:title="Áo">
         <menu>
             <item
-                android:id="@+id/aoNam"
-                android:title="Áo"/>
+                android:id="@+id/tshirt"
+                android:title="Áo tay ngắn"/>
             <item
-                android:id="@+id/quanNam"
-                android:title="Quần"/>
+                android:id="@+id/longshirt"
+                android:title="Áo tay dài"/>
+
+            <item
+                android:id="@+id/khoac"
+                android:title="Áo khoác"/>
+            <item
+                android:id="@+id/somi"
+                android:title="Sơ mi"/>
         </menu>
     </item>
-    <item android:title="Nữ">
+
+    <item android:title="Quần">
         <menu>
             <item
-                android:id="@+id/aoNu"
-                android:title="Áo"/>
+                android:id="@+id/shortpant"
+                android:title="Quần short"/>
             <item
-                android:id="@+id/quanNu"
-                android:title="Quần"/>
-            <item
-                android:id="@+id/vay"
-                android:title="Váy"/>
+                android:id="@+id/longpant"
+                android:title="Quần dài"/>
         </menu>
     </item>
+
+    <item android:title="Phụ kiện">
+        <menu>
+            <item
+                android:id="@+id/non"
+                android:title="Nón"/>
+            <item
+                android:id="@+id/vo"
+                android:title="Vớ"/>
+        </menu>
+    </item>
+
 
 </menu>

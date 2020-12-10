@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -92,6 +93,10 @@ public class Register extends AppCompatActivity {
                                     Log.d("TAG", "Tạo profile thành công cho " + userID);
                                 }
                             });
+
+                            documentReference = fStore.collection("users").document(userID).collection("HistoryBills").document(userID);
+                            documentReference.set(user);
+
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             finish();
                         }

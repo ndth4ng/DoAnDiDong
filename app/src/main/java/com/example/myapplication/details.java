@@ -12,6 +12,7 @@ public class details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
