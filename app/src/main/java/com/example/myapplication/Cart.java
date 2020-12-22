@@ -17,10 +17,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class Cart extends Fragment {
-    View view;
     ListView listView;
     ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
-    FurnitureAdapter furnitureAdapter;
+    //FurnitureAdapter furnitureAdapter;
     View viewC;
 
     Button btnPay;
@@ -28,24 +27,8 @@ public class Cart extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewC = inflater.inflate(R.layout.activity_cart, container, false);
-        listView = viewC.findViewById(R.id.listViewCart);
-        btnPay = viewC.findViewById(R.id.pay);
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 299, R.drawable.ao));
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 300, R.drawable.ao));
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 300, R.drawable.ao));
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 300, R.drawable.ao));
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 303, R.drawable.ao));
-        furnitureArrayList.add(new Furniture("Zinus Jocelyn", "Lorem ipsum dolor sit amet, consectetue, purus lectus malesuada libero.", 301, R.drawable.ao));
-        furnitureAdapter = new FurnitureAdapter(getActivity(), R.layout.row_wishlist, furnitureArrayList);
-        listView.setAdapter(furnitureAdapter);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                furnitureArrayList.remove(position);
-                listView.setAdapter(furnitureAdapter);
-                return false;
-            }
-        });
+
+
 
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +41,5 @@ public class Cart extends Fragment {
         });
 
         return viewC;
-
-
     }
 }

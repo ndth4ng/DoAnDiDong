@@ -17,10 +17,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private Context context;
     private List<Item> listItem;
     // Lưu context đê dễ truy cập
+    private OnItemListener onItemListener;
 
-    public ItemAdapter(Context context, List<Item> listItem) {
+    public ItemAdapter(Context context, List<Item> listItem, OnItemListener onItemListener) {
         this.context = context;
         this.listItem = listItem;
+        this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -28,7 +30,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // gán view
         View view = LayoutInflater.from(context).inflate(R.layout.cell_categories, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onItemListener);
     }
 
     @Override
@@ -44,17 +46,30 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return listItem.size(); // tra ve item tai vi tri posision
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgItem;
         TextView nameItem;
+        OnItemListener onItemListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             // Anh xa
 
             imgItem = itemView.findViewById(R.id.slide);
             nameItem = itemView.findViewById(R.id.tvItem);
+            this.onItemListener = onItemListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onItemListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemListener {
+        void onItemClick(int position);
     }
 }

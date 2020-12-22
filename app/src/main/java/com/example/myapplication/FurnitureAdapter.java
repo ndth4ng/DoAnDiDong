@@ -1,3 +1,4 @@
+/*
 package com.example.myapplication;
 
 import android.content.Context;
@@ -55,7 +56,8 @@ public class FurnitureAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+           */
+/* LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
             holder = new ViewHolder();
             //ánh xạ view
@@ -63,21 +65,25 @@ public class FurnitureAdapter extends BaseAdapter {
             holder.tv_description = convertView.findViewById(R.id.des_pro);
             holder.tv_price = convertView.findViewById(R.id.price_pro);
             holder.img = convertView.findViewById(R.id.image_pro);
-            convertView.setTag(holder);
+            convertView.setTag(holder);*//*
+
         }
         else {
             holder = (ViewHolder) convertView.getTag();
         }
 
 
-        Furniture furniture = furnitureList.get(position);
+      */
+/*  Furniture furniture = furnitureList.get(position);
         holder.tv_name.setText(furniture.getName());
         holder.tv_description.setText(furniture.getDes());
         holder.tv_price.setText(furniture.getPrice().toString());
         holder.img.setImageResource(furniture.getImage());
-        return convertView;
+        return convertView;*//*
+
     }
 
 
 
 }
+*/

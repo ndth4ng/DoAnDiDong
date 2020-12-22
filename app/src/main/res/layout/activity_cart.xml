@@ -4,30 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Cart"
-    android:background="#fafafa">
+    android:background="#fafafa"
+    tools:context=".Cart">
 
-    <ListView
-        android:id="@+id/listViewCart"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-    <Button
-        android:id="@+id/pay"
-        android:layout_width="325dp"
-        android:layout_height="73dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="80dp"
-        android:text="Tiến hành thanh toán"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:background="@drawable/custom_edittext"
-        />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ListView
+            android:id="@+id/listViewCart"
+            android:layout_width="match_parent"
+            android:layout_height="500dp" />
+
+        <Button
+            android:id="@+id/pay"
+            android:layout_width="325dp"
+            android:layout_height="73dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_edittext"
+            android:text="Tiến hành thanh toán"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,27 +2,22 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 //import android.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     ImageButton menu_left;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    BottomNavigationView bottomNav;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +40,11 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         navigationView = findViewById(R.id.navigationView);
+
         navigationView.setNavigationItemSelectedListener(navigation);
 
         if (savedInstanceState == null) {
@@ -62,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    void actionToolBar(){
+
+    void actionToolBar() {
         menu_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,17 +75,17 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(Gravity.LEFT);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
 
-    void AnhXa(){
+    void AnhXa() {
         user = findViewById(R.id.user);
         drawerLayout = findViewById(R.id.drawer_layout);
         menu_left = findViewById(R.id.menu_left);
     }
+
     private NavigationView.OnNavigationItemSelectedListener navigation =
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -93,29 +93,58 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.tshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "tshirt");
                             startActivity(intent);
                             break;
                         }
-                       /* case R.id.quanNam: {
-                            Intent intent = new Intent(MainActivity.this, Categories.class);
+                        case R.id.longshirt: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "longshirt");
                             startActivity(intent);
                             break;
                         }
-                        case R.id.aoNu: {
-                            Intent intent = new Intent(MainActivity.this, Categories.class);
+                        case R.id.jacket: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "jacket");
                             startActivity(intent);
                             break;
                         }
-                        case R.id.quanNu: {
-                            Intent intent = new Intent(MainActivity.this, Categories.class);
+                        case R.id.somi: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "somi");
                             startActivity(intent);
                             break;
                         }
-                        case R.id.vay: {
-                            Intent intent = new Intent(MainActivity.this, Categories.class);
+                        case R.id.shortpant: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "shortpant");
                             startActivity(intent);
                             break;
-                        }*/
+                        }
+                        case R.id.longpant: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "longpant");
+                            startActivity(intent);
+                            break;
+                        }
+                        case R.id.hat: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "hat");
+                            startActivity(intent);
+                            break;
+                        }
+                        case R.id.socks: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "socks");
+                            startActivity(intent);
+                            break;
+                        }
+                        case R.id.belt: {
+                            Intent intent = new Intent(getApplicationContext(), Categories.class);
+                            intent.putExtra("cate", "belt");
+                            startActivity(intent);
+                            break;
+                        }
                     }
                     return true;
                 }
@@ -132,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.wishlist:
                             selectedFragment = new Wishlist();
-                            Toast.makeText(MainActivity.this, "Nhấn giữ sản phẩm để xóa", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "Nhấn giữ sản phẩm để xóa", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.search:
                             selectedFragment = new Search();
@@ -141,8 +170,17 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new Cart();
                             break;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
+                    loadFragment(selectedFragment);
+
                     return true;
                 }
             };
+
+    public void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

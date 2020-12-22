@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +15,16 @@ import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Transaction;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class FirestoreAdapter extends FirestorePagingAdapter<Product, FirestoreAdapter.ProductViewHolder> {
+public class WishlistAdapter extends FirestorePagingAdapter<Product, WishlistAdapter.ProductViewHolder> {
 
     private OnListItemClick onListItemClick;
 
-    public FirestoreAdapter(@NonNull FirestorePagingOptions<Product> options, OnListItemClick onListItemClick) {
+    public WishlistAdapter(@NonNull FirestorePagingOptions<Product> options, OnListItemClick onListItemClick) {
         super(options);
         this.onListItemClick = onListItemClick;
     }
@@ -38,6 +35,7 @@ public class FirestoreAdapter extends FirestorePagingAdapter<Product, FirestoreA
         Locale locale = new Locale("vn","VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         holder.priceProduct.setText(currencyFormatter.format(model.getPrice()));
+        holder.detailProduct.setText(model.getDetail());
 
         Picasso.get().load(model.getImage()).resize(450,500).centerCrop().into(holder.imgProduct);
     }
@@ -45,7 +43,7 @@ public class FirestoreAdapter extends FirestorePagingAdapter<Product, FirestoreA
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_product,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_wishlist,parent,false);
         return new ProductViewHolder(view);
     }
 
@@ -68,13 +66,14 @@ public class FirestoreAdapter extends FirestorePagingAdapter<Product, FirestoreA
             case LOADED:
                 Log.d("PAGING_LOG","Tổng số sản phẩm : " + getItemCount());
                 break;
+
         }
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imgProduct;
-        TextView nameProduct, priceProduct;
+        TextView nameProduct, priceProduct, detailProduct;
         LinearLayout linearLayout;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -84,11 +83,12 @@ public class FirestoreAdapter extends FirestorePagingAdapter<Product, FirestoreA
             imgProduct = itemView.findViewById(R.id.imageProduct);
             nameProduct = itemView.findViewById(R.id.nameProduct);
             priceProduct = itemView.findViewById(R.id.priceProduct);
+            detailProduct = itemView.findViewById(R.id.detailProduct);
 
             linearLayout = itemView.findViewById(R.id.linearLayout);
 
-            linearLayout.setOnClickListener(this);
             imgProduct.setOnClickListener(this);
+            linearLayout.setOnClickListener(this);
         }
 
         @Override

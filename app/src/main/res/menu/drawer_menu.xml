@@ -13,7 +13,7 @@
                 android:title="Áo tay dài"/>
 
             <item
-                android:id="@+id/khoac"
+                android:id="@+id/jacket"
                 android:title="Áo khoác"/>
             <item
                 android:id="@+id/somi"
@@ -35,11 +35,14 @@
     <item android:title="Phụ kiện">
         <menu>
             <item
-                android:id="@+id/non"
+                android:id="@+id/hat"
                 android:title="Nón"/>
             <item
-                android:id="@+id/vo"
+                android:id="@+id/socks"
                 android:title="Vớ"/>
+            <item
+                android:id="@+id/belt"
+                android:title="Thắt lưng"/>
         </menu>
     </item>
 
