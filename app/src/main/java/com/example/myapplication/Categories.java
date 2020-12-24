@@ -88,15 +88,15 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
 
         Toast.makeText(this, "Type: " + type + " Cate: " + cate, Toast.LENGTH_SHORT).show();
 
-        PagedList.Config config = new PagedList.Config.Builder()
+        /*PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(6) // Số item muốn load lần đầu tiên
                 .setPageSize(4) //Số item muốn load khi kéo trang xuống
-                .build();
+                .build();*/
 
         //RecyclerOptions
-        FirestorePagingOptions<Product> options = new FirestorePagingOptions.Builder<Product>()
+        FirestoreRecyclerOptions<Product> options = new FirestoreRecyclerOptions.Builder<Product>()
                 .setLifecycleOwner(this)
-                .setQuery(query, config, new SnapshotParser<Product>() {
+                .setQuery(query, new SnapshotParser<Product>() {
                     @NonNull
                     @Override
                     public Product parseSnapshot(@NonNull DocumentSnapshot snapshot) {
@@ -146,11 +146,19 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
         return type;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200) {
+            setResult(300);
+        }
+
+    }
 
     @Override
-    public void onItemClick(final DocumentSnapshot snapshot, int position) {
-        Log.d("ITEM_CLICK","Chọn sản phẩm : " + position + " ID: " + snapshot.getId());
-        fStore.collection("products").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void onItemClick(Product snapshot, int position) {
+        Log.d("ITEM_CLICK","Chọn sản phẩm : " + position + " ID: " + snapshot.getItemId());
+        fStore.collection("products").document(snapshot.getItemId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot snapshot) {
                 Product product = snapshot.toObject(Product.class);
@@ -165,7 +173,7 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
                 i.putExtra("price", String.valueOf(product.getPrice()));*/
 
                 i.putExtra("Product", product);
-                startActivity(i);
+                startActivityForResult(i, 200);
 
             }
         }).addOnFailureListener(new OnFailureListener() {

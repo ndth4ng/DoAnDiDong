@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,24 +11,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Transaction;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, FirestoreAdapter.ProductViewHolder> {
+public class WishlistAdapterPaging extends FirestorePagingAdapter<Product, WishlistAdapterPaging.ProductViewHolder> {
 
     private OnListItemClick onListItemClick;
 
-    public FirestoreAdapter(@NonNull FirestoreRecyclerOptions<Product> options, OnListItemClick onListItemClick) {
+    public WishlistAdapterPaging(@NonNull FirestorePagingOptions<Product> options, OnListItemClick onListItemClick) {
         super(options);
         this.onListItemClick = onListItemClick;
     }
@@ -40,6 +35,7 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
         Locale locale = new Locale("vn","VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         holder.priceProduct.setText(currencyFormatter.format(model.getPrice()));
+        holder.detailProduct.setText(model.getDetail());
 
         Picasso.get().load(model.getImage()).resize(450,500).centerCrop().into(holder.imgProduct);
     }
@@ -47,11 +43,11 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_product,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_wishlist,parent,false);
         return new ProductViewHolder(view);
     }
 
-    /*@Override
+    @Override
     protected void onLoadingStateChanged(@NonNull LoadingState state) {
         super.onLoadingStateChanged(state);
         switch (state) {
@@ -70,13 +66,14 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
             case LOADED:
                 Log.d("PAGING_LOG","Tổng số sản phẩm : " + getItemCount());
                 break;
+
         }
-    }*/
+    }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imgProduct;
-        TextView nameProduct, priceProduct;
+        TextView nameProduct, priceProduct, detailProduct;
         LinearLayout linearLayout;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -86,11 +83,12 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
             imgProduct = itemView.findViewById(R.id.imageProduct);
             nameProduct = itemView.findViewById(R.id.nameProduct);
             priceProduct = itemView.findViewById(R.id.priceProduct);
+            detailProduct = itemView.findViewById(R.id.detailProduct);
 
             linearLayout = itemView.findViewById(R.id.linearLayout);
 
-            linearLayout.setOnClickListener(this);
             imgProduct.setOnClickListener(this);
+            linearLayout.setOnClickListener(this);
         }
 
         @Override
@@ -100,6 +98,6 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
     }
 
     public interface OnListItemClick {
-        void onItemClick(Product snapshot, int position);
+        void onItemClick(DocumentSnapshot snapshot, int position);
     }
 }

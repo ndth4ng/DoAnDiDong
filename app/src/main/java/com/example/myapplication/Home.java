@@ -47,7 +47,6 @@ public class Home extends Fragment implements ItemAdapter.OnItemListener {
         itemList.add(new Item("Quần",R.drawable.quan));
         itemList.add(new Item("Phụ kiện",R.drawable.vo));
 
-
     }
 
     @Override
@@ -57,19 +56,19 @@ public class Home extends Fragment implements ItemAdapter.OnItemListener {
             case 0: {
                 Intent intent = new Intent(getContext(), Categories.class);
                 intent.putExtra("type", "shirts");
-                startActivity(intent);
+                startActivityForResult(intent,300);
                 break;
             }
             case 1: {
                 Intent intent = new Intent(getContext(), Categories.class);
                 intent.putExtra("type", "pants");
-                startActivity(intent);
+                startActivityForResult(intent,300);
                 break;
             }
             case 2: {
                 Intent intent = new Intent(getContext(), Categories.class);
                 intent.putExtra("type", "accessories");
-                startActivity(intent);
+                startActivityForResult(intent,300);
                 break;
             }
         }
@@ -79,6 +78,12 @@ public class Home extends Fragment implements ItemAdapter.OnItemListener {
         startActivity(intent);*/
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 300) {
+            ((MainActivity)getActivity()).getBadge();
+        }
+    }
 }
 

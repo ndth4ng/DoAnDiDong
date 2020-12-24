@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -16,8 +17,16 @@ import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     BottomNavigationView bottomNav;
 
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +47,19 @@ public class MainActivity extends AppCompatActivity {
 
         AnhXa();
 
+
+
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        getBadge();
+
         actionToolBar();
 
         drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-
         bottomNav = findViewById(R.id.bottom_nav);
+
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         navigationView = findViewById(R.id.navigationView);
@@ -59,7 +78,29 @@ public class MainActivity extends AppCompatActivity {
                 //finish();
             }
         });
+    }
 
+    public void getBadge() {
+        String userID = fAuth.getCurrentUser().getUid();
+        CollectionReference collectRef = fStore.collection("users").document(userID).collection("Cart");
+        collectRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    int cartSize = task.getResult().size();
+                    BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.cart);
+                    badge.setVisible(true);
+                    if (badge == null) {
+                        badge.setVisible(false);
+                        badge.clearNumber();
+                    } else if (cartSize != 0){
+                        badge.setNumber(cartSize);
+                    } else {
+                        badge.setVisible(false);
+                    }
+                }
+            }
+        });
     }
 
     void actionToolBar() {
@@ -94,55 +135,55 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.tshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "tshirt");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.longshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longshirt");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.jacket: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "jacket");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.somi: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "somi");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.shortpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "shortpant");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.longpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longpant");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.hat: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "hat");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.socks: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "socks");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                         case R.id.belt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "belt");
-                            startActivity(intent);
+                            startActivityForResult(intent,300);
                             break;
                         }
                     }
@@ -182,5 +223,12 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 300)
+            getBadge();
     }
 }

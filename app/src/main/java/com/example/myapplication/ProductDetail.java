@@ -9,12 +9,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,8 +39,12 @@ import java.util.Map;
 import okhttp3.internal.cache.DiskLruCache;
 
 public class ProductDetail extends AppCompatActivity {
-    ImageView imageProduct, back, inc, dec, cart, favorite;
+    ImageView imageProduct, back, inc, dec, favorite;
     TextView nameProduct, detailProduct, priceProduct, quantity;
+    Button add;
+    RadioButton r_s, r_m, r_l;
+    RadioGroup size_group;
+    String size_product = "M";
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -141,14 +150,6 @@ public class ProductDetail extends AppCompatActivity {
             }
         });
 
-        // Cart
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new Cart()).addToBackStack(null).commit();
-            }
-        });
-
         // Tang so luong san pham
         inc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,9 +171,129 @@ public class ProductDetail extends AppCompatActivity {
             }
         });
 
-        //Yeu thich
+        //Thay doi size san pham
+        size_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case (R.id.size_S) :
+                        size_product = "S";
+                        Toast.makeText(ProductDetail.this,"S",Toast.LENGTH_SHORT).show();
+                        break;
+                    case (R.id.size_M) :
+                        size_product = "M";
+                        Toast.makeText(ProductDetail.this,"M",Toast.LENGTH_SHORT).show();
+                        break;
+                    case (R.id.size_L) :
+                        size_product = "L";
+                        Toast.makeText(ProductDetail.this,"L",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+        // Them sp vao gio hang
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddToCart(product, size_product);
+                finish();
+            }
+        });
 
 
+    }
+
+    public void AddToCart(Product product, final String size_product) {
+        final Product pro = product;
+        final String userID = fAuth.getCurrentUser().getUid();
+        DocumentReference productIdRef = fStore.collection("users").document(userID).collection("Cart").document(pro.getItemId().concat(size_product));
+        productIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot.exists()) {
+
+                        final Long newValue = Long.valueOf(snapshot.get("amount").toString());
+                        final Long newValue2 = Long.valueOf(quantity.getText().toString());
+                        final Long newValue3 = newValue + newValue2;
+
+                        fStore.collection("users").document(userID).collection("Cart").document(snapshot.getId()).update("amount",newValue3);
+
+                        Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
+                    } else {
+                        CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
+                        cartItem.setAmount(Long.valueOf(quantity.getText().toString()));
+                        cartItem.setSize(size_product);
+
+                        fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).set(cartItem);
+
+                        Toast.makeText(ProductDetail.this,"Thêm sp vào Cart",Toast.LENGTH_SHORT).show();
+
+                        setResult(200);
+                    }
+                }
+            }
+        });
+        /*cartRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable final DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error == null) {
+                    DocumentReference cartPro = fStore.collection("products").document(pro.getItemId());
+                    if (value.exists()) {
+
+                        cartPro.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                final CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
+
+                                final Long newValue = Long.valueOf(value.get("amount").toString());
+                                final Long newValue2 = Long.valueOf(quantity.getText().toString());
+                                final Long newValue3 = newValue + newValue2;
+
+                                cartItem.setAmount(newValue3);
+                                cartItem.setSize(size_product);
+
+                                fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).update("amount",cartItem.getAmount());
+
+                                Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                       *//* final Long newValue = Long.valueOf(value.get("amount").toString());
+                        final Long newValue2 = Long.valueOf(quantity.getText().toString());
+                        final Long newValue3 = newValue + newValue2;
+                        fStore.collection("users").document(userID).collection("Cart").document(value.getId()).update("amount", newValue3).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("TAG","Update thanh cong");
+                                Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("TAG", "Loi update san pham: ", e);
+                            }
+                        });*//*
+
+
+                    } else {
+                        cartPro.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                final CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
+                                cartItem.setAmount(Long.valueOf(quantity.getText().toString()));
+                                cartItem.setSize(size_product);
+
+                                fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).set(cartItem);
+
+                                Toast.makeText(ProductDetail.this,"Thêm sp vào Cart",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }
+        }); */
     }
 
     protected void AnhXa() {
@@ -185,8 +306,11 @@ public class ProductDetail extends AppCompatActivity {
         inc = findViewById(R.id.inc);
         dec = findViewById(R.id.dec);
         quantity = findViewById(R.id.quantity);
-        cart = findViewById(R.id.cart);
+        //cart = findViewById(R.id.cart);
         favorite = findViewById(R.id.favorite);
+        add = findViewById(R.id.addtocart);
+        size_group = findViewById(R.id.group_size);
+
     }
 
     @Override
@@ -194,7 +318,4 @@ public class ProductDetail extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED);
         super.onBackPressed();
     }
-
-
-
 }

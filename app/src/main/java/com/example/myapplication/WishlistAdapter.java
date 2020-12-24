@@ -11,20 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class WishlistAdapter extends FirestorePagingAdapter<Product, WishlistAdapter.ProductViewHolder> {
+public class WishlistAdapter extends FirestoreRecyclerAdapter<Product, WishlistAdapter.ProductViewHolder> {
 
     private OnListItemClick onListItemClick;
 
-    public WishlistAdapter(@NonNull FirestorePagingOptions<Product> options, OnListItemClick onListItemClick) {
+    public WishlistAdapter(@NonNull FirestoreRecyclerOptions<Product> options, OnListItemClick onListItemClick) {
         super(options);
         this.onListItemClick = onListItemClick;
     }
@@ -45,29 +43,6 @@ public class WishlistAdapter extends FirestorePagingAdapter<Product, WishlistAda
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_wishlist,parent,false);
         return new ProductViewHolder(view);
-    }
-
-    @Override
-    protected void onLoadingStateChanged(@NonNull LoadingState state) {
-        super.onLoadingStateChanged(state);
-        switch (state) {
-            case LOADING_INITIAL:
-                Log.d("PAGING_LOG","Bắt đầu hiển thị sản phẩm");
-                break;
-            case LOADING_MORE:
-                Log.d("PAGING_LOG","Hiển thị sản phẩm tiếp theo.");
-                break;
-            case FINISHED:
-                Log.d("PAGING_LOG","Đã hiển thị tất cả sản phẩm.");
-                break;
-            case ERROR:
-                Log.d("PAGING_LOG","Lỗi hiển thị dữ liệu.");
-                break;
-            case LOADED:
-                Log.d("PAGING_LOG","Tổng số sản phẩm : " + getItemCount());
-                break;
-
-        }
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -94,10 +69,11 @@ public class WishlistAdapter extends FirestorePagingAdapter<Product, WishlistAda
         @Override
         public void onClick(View view) {
             onListItemClick.onItemClick(getItem(getAdapterPosition()), getAdapterPosition());
+            Log.d("TAG","CLICK CLICK");
         }
     }
 
     public interface OnListItemClick {
-        void onItemClick(DocumentSnapshot snapshot, int position);
+        void onItemClick(Product snapshot, int position);
     }
 }
