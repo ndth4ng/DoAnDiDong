@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,6 +62,8 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
     FirebaseFirestore fStore;
     FirestoreAdapter adapter;
     RecyclerView recyclerView;
+
+    private static final int REQUEST_CODE_BADGE = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,10 +152,9 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 200) {
-            setResult(300);
+        if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK) {
+            setResult(RESULT_OK);
         }
-
     }
 
     @Override
@@ -173,7 +175,7 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
                 i.putExtra("price", String.valueOf(product.getPrice()));*/
 
                 i.putExtra("Product", product);
-                startActivityForResult(i, 200);
+                startActivityForResult(i, REQUEST_CODE_BADGE);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -182,5 +184,11 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
                 Toast.makeText(getApplicationContext(),"Khong the lay du lieu",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_OK);
+        super.onBackPressed();
     }
 }

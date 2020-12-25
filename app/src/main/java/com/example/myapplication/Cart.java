@@ -3,12 +3,14 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,9 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     String userId;
     Button btnPay;
 
+    private static final int REQUEST_CODE_BADGE = 300;
+    //private static final int REQUEST_CODE_PAY = 300;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,8 +60,7 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), Pay.class);
-                startActivity(i);
-                getActivity().overridePendingTransition(0, 0);
+                startActivityForResult(i, REQUEST_CODE_BADGE);
             }
         });
 
@@ -66,11 +70,6 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     public void getList() {
         if (userId != null) {
             Query query = fStore.collection("users").document(userId).collection("Cart");
-
-            /*PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(6) // Số item muốn load lần đầu tiên
-                    .setPageSize(4) //Số item muốn load khi kéo trang xuống
-                    .build();*/
 
             FirestoreRecyclerOptions<CartItem> options = new FirestoreRecyclerOptions.Builder<CartItem>()
                     .setLifecycleOwner(this)
@@ -97,9 +96,10 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
 
             recyclerView.setAdapter(cartAdapter);
 
-            ((MainActivity)getActivity()).getBadge();
+            ((MainActivity) getActivity()).getBadge();
         }
     }
+
 
     public void AnhXa() {
         recyclerView = view.findViewById(R.id.listView);
@@ -108,7 +108,7 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
 
     @Override
     public void onItemClick(CartItem snapshot, int position) {
-        Log.d("ITEM_CLICK","Chọn sản phẩm : " + position + " ID: " + snapshot.getItemId());
+        Log.d("ITEM_CLICK", "Chọn sản phẩm : " + position + " ID: " + snapshot.getItemId());
         String productID = snapshot.getItemId().substring(0, snapshot.getItemId().length() - 1);
         fStore.collection("products").document(productID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -119,39 +119,45 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
                 Intent i = new Intent(getActivity(), ProductDetail.class);
 
                 i.putExtra("Product", product);
-                startActivityForResult(i, 100);
+                startActivityForResult(i, REQUEST_CODE_BADGE);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(),"Khong the lay du lieu",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Khong the lay du lieu", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    void resetBadge() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity) getActivity()).getBadge();
+            }
+        }, 200); // 5000ms delay
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK)
+            resetBadge();
     }
 
     @Override
     public void onDelClick(CartItem snapshot, int position) {
         fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).delete();
         getList();
-        Toast.makeText(getActivity(),"Xoa khoi cart",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Xoa khoi cart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onValueChangeClick(CartItem snapshot, int position, long newValue) {
-        fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).update("amount",newValue);
-        Toast.makeText(getActivity(),"Product ID:" + snapshot.getItemId(),Toast.LENGTH_SHORT).show();
+        fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).update("amount", newValue);
+        Toast.makeText(getActivity(), "Product ID:" + snapshot.getItemId(), Toast.LENGTH_SHORT).show();
     }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 100) {
-            getList();
-        }
-    }
-
-
 }

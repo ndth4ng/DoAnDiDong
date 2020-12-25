@@ -64,8 +64,6 @@ public class ProductDetail extends AppCompatActivity {
         Intent data = getIntent();
         final Product product = (Product) data.getSerializableExtra("Product");
 
-        //Toast.makeText(this, "Product ID: " + product.getItemId(), Toast.LENGTH_SHORT).show();
-
         Picasso.get().load(product.getImage()).into(imageProduct);
 
         nameProduct.setText(product.getName());
@@ -99,10 +97,6 @@ public class ProductDetail extends AppCompatActivity {
                                         fStore.collection("users").document(userID).collection("Favorites").document(product.getItemId()).delete();
                                         favorite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                                         Toast.makeText(ProductDetail.this,"Xóa sp khỏi ds yêu thích",Toast.LENGTH_SHORT).show();
-
-                                        // Xoa san pham set Ket qua tra ve de reset view
-                                        setResult(100);
-
                                         Log.d("TAG", "Delete Product ID: " + snapshot.getId() + " from Favorites");
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -136,8 +130,6 @@ public class ProductDetail extends AppCompatActivity {
                             }
                         });
                     }
-
-
                 }
             }
         });
@@ -197,11 +189,9 @@ public class ProductDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AddToCart(product, size_product);
-                finish();
+                onBackPressed();
             }
         });
-
-
     }
 
     public void AddToCart(Product product, final String size_product) {
@@ -230,70 +220,10 @@ public class ProductDetail extends AppCompatActivity {
                         fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).set(cartItem);
 
                         Toast.makeText(ProductDetail.this,"Thêm sp vào Cart",Toast.LENGTH_SHORT).show();
-
-                        setResult(200);
                     }
                 }
             }
         });
-        /*cartRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable final DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error == null) {
-                    DocumentReference cartPro = fStore.collection("products").document(pro.getItemId());
-                    if (value.exists()) {
-
-                        cartPro.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot snapshot) {
-                                final CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
-
-                                final Long newValue = Long.valueOf(value.get("amount").toString());
-                                final Long newValue2 = Long.valueOf(quantity.getText().toString());
-                                final Long newValue3 = newValue + newValue2;
-
-                                cartItem.setAmount(newValue3);
-                                cartItem.setSize(size_product);
-
-                                fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).update("amount",cartItem.getAmount());
-
-                                Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                       *//* final Long newValue = Long.valueOf(value.get("amount").toString());
-                        final Long newValue2 = Long.valueOf(quantity.getText().toString());
-                        final Long newValue3 = newValue + newValue2;
-                        fStore.collection("users").document(userID).collection("Cart").document(value.getId()).update("amount", newValue3).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("TAG","Update thanh cong");
-                                Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("TAG", "Loi update san pham: ", e);
-                            }
-                        });*//*
-
-
-                    } else {
-                        cartPro.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot snapshot) {
-                                final CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
-                                cartItem.setAmount(Long.valueOf(quantity.getText().toString()));
-                                cartItem.setSize(size_product);
-
-                                fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).set(cartItem);
-
-                                Toast.makeText(ProductDetail.this,"Thêm sp vào Cart",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-            }
-        }); */
     }
 
     protected void AnhXa() {
@@ -306,16 +236,15 @@ public class ProductDetail extends AppCompatActivity {
         inc = findViewById(R.id.inc);
         dec = findViewById(R.id.dec);
         quantity = findViewById(R.id.quantity);
-        //cart = findViewById(R.id.cart);
+
         favorite = findViewById(R.id.favorite);
         add = findViewById(R.id.addtocart);
         size_group = findViewById(R.id.group_size);
-
     }
 
     @Override
     public void onBackPressed() {
-        setResult(Activity.RESULT_CANCELED);
+        setResult(Activity.RESULT_OK);
         super.onBackPressed();
     }
 }

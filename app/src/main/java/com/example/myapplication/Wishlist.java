@@ -3,11 +3,15 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,19 +37,19 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
 
     WishlistAdapter adapter;
 
+    private static final int REQUEST_CODE_BADGE = 300;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_wishlist, container, false);
 
+        AnhXa();
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
         userId = fAuth.getCurrentUser().getUid();
-
-        Toast.makeText(getActivity(), "UserID: " + userId, Toast.LENGTH_SHORT).show();
-
-        AnhXa();
 
         getList();
 
@@ -55,8 +59,6 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
     public void AnhXa() {
         recyclerView = view.findViewById(R.id.wishlist);
     }
-
-
 
     public void getList() {
         if (userId != null) {
@@ -78,27 +80,6 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
 
             adapter = new WishlistAdapter(options, this);
 
-            /*PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(6) // Số item muốn load lần đầu tiên
-                    .setPageSize(4) //Số item muốn load khi kéo trang xuống
-                    .build();
-
-            FirestorePagingOptions<Product> options = new FirestorePagingOptions.Builder<Product>()
-                    .setLifecycleOwner(this)
-                    .setQuery(query, config, new SnapshotParser<Product>() {
-                        @NonNull
-                        @Override
-                        public Product parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                            Product product = snapshot.toObject(Product.class);
-                            String itemId = snapshot.getId();
-                            product.setItemId(itemId);
-                            return product;
-                        }
-                    })
-                    .build();*/
-
-            //wishlistAdapter = new WishlistAdapter(options, this);
-
             recyclerView.setHasFixedSize(true);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -106,27 +87,8 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
             recyclerView.setLayoutManager(linearLayoutManager);
 
             recyclerView.setAdapter(adapter);
-        }
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 100) {
-            getList();
+            ((MainActivity)getActivity()).getBadge();
         }
     }
 
@@ -139,10 +101,13 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
                 Product product = snapshot.toObject(Product.class);
                 product.setItemId(snapshot.getId());
 
-                Intent i = new Intent(getActivity(), ProductDetail.class);
+                final Intent i = new Intent(getActivity(), ProductDetail.class);
 
                 i.putExtra("Product", product);
-                startActivityForResult(i, 100);
+
+                startActivityForResult(i, REQUEST_CODE_BADGE);
+
+                getList();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -151,5 +116,22 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
                 Toast.makeText(getActivity(),"Khong the lay du lieu",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK) {
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity)getActivity()).getBadge();
+                }
+            }, 200); // 5000ms delay
+
+
+        }
     }
 }

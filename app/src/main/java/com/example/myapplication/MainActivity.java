@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
+    private static final int REQUEST_CODE_BADGE = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,35 +50,28 @@ public class MainActivity extends AppCompatActivity {
 
         AnhXa();
 
-
-
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-        getBadge();
-
         actionToolBar();
-
-        drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-
-        bottomNav = findViewById(R.id.bottom_nav);
-
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-
-        navigationView = findViewById(R.id.navigationView);
-
-        navigationView.setNavigationItemSelectedListener(navigation);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new Home()).commit();
         }
 
+        drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        navigationView.setNavigationItemSelectedListener(navigation);
+
+        getBadge();
+
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), User.class));
-                //finish();
             }
         });
     }
@@ -90,10 +86,8 @@ public class MainActivity extends AppCompatActivity {
                     int cartSize = task.getResult().size();
                     BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.cart);
                     badge.setVisible(true);
-                    if (badge == null) {
-                        badge.setVisible(false);
-                        badge.clearNumber();
-                    } else if (cartSize != 0){
+
+                    if (cartSize != 0){
                         badge.setNumber(cartSize);
                     } else {
                         badge.setVisible(false);
@@ -125,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         user = findViewById(R.id.user);
         drawerLayout = findViewById(R.id.drawer_layout);
         menu_left = findViewById(R.id.menu_left);
+        bottomNav = findViewById(R.id.bottom_nav);
+        navigationView = findViewById(R.id.navigationView);
     }
 
     private NavigationView.OnNavigationItemSelectedListener navigation =
@@ -135,55 +131,55 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.tshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "tshirt");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.longshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longshirt");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.jacket: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "jacket");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.somi: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "somi");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.shortpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "shortpant");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.longpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longpant");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.hat: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "hat");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.socks: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "socks");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                         case R.id.belt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "belt");
-                            startActivityForResult(intent,300);
+                            startActivityForResult(intent,REQUEST_CODE_BADGE);
                             break;
                         }
                     }
@@ -225,10 +221,16 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 300)
+
+        if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK) {
             getBadge();
+        }
     }
+
+
 }

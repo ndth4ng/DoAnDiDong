@@ -14,6 +14,10 @@ public class Search extends Fragment {
     View view;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_search, container, false);
+        ((MainActivity)getActivity()).getBadge();
+
         return view;
+
+
     }
 }
