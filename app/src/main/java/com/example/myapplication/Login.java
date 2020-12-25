@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,8 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
     FirebaseAuth fAuth;
     Button btnLogin;
-    TextView tvRegister;
+    Button btnRegister;
     EditText edtEmail, edtPassword;
+    TextView tvReset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +35,9 @@ public class Login extends AppCompatActivity {
 
         AnhXa();
 
-        FirebaseUser user = fAuth.getCurrentUser();
+        FirebaseUser user = null;
+
+        user = fAuth.getCurrentUser();
 
         if (user != null) {
             Toast.makeText(this,"Bạn đã đăng nhập từ trước.",Toast.LENGTH_SHORT).show();
@@ -58,10 +65,10 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                if (password.length() < 8) {
+                /*if (password.length() < 8) {
                     edtPassword.setError("Mật khẩu phải từ 8 ký tự!");
                     return;
-                }
+                }*/
 
                 // Đăng nhập
 
@@ -80,11 +87,52 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        tvRegister.setOnClickListener(new View.OnClickListener() {
+        // Đăng ký
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),Register.class));
-                finish();
+            }
+        });
+
+        // Quên mật khẩu
+
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText resetMail = new EditText(view.getContext());
+                AlertDialog.Builder resetDialog = new AlertDialog.Builder(view.getContext());
+                resetDialog.setTitle("Quên mật khẩu?");
+                resetDialog.setMessage("Vui lòng nhập email để tìm kiếm tài khoản.");
+                resetDialog.setView(resetMail);
+
+                resetDialog.setPositiveButton("Tìm kiếm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String email = resetMail.getText().toString();
+                        fAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(Login.this,"Đường dẫn lấy lại mật khẩu đã được gửi đến Email của bạn.", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Login.this,"Email này không tồn tại.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                resetDialog.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Thoát dialog
+                    }
+                });
+
+                resetDialog.create().show();
             }
         });
     }
@@ -92,8 +140,9 @@ public class Login extends AppCompatActivity {
     protected void AnhXa() {
         fAuth = FirebaseAuth.getInstance();
         btnLogin = findViewById(R.id.btnLogin);
-        tvRegister = findViewById(R.id.login_register);
+        btnRegister = findViewById(R.id.btnRegister);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
+        tvReset = findViewById(R.id.tvReset);
     }
 }

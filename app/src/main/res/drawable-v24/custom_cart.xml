@@ -11,9 +11,9 @@
         android:type="radial" />
 
     <stroke
-        android:color="#FFFFFF" />
+        android:color="#000000" />
 
     <size
-        android:height="100dp"
-        android:width="100dp" />
+        android:height="50dp"
+        android:width="50dp" />
 </shape>

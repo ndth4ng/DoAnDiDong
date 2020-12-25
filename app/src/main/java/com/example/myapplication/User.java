@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 
 public class User extends AppCompatActivity {
 
@@ -50,22 +51,27 @@ public class User extends AppCompatActivity {
 
         userId = fAuth.getCurrentUser().getUid();
 
-        //final FirebaseUser user = fAuth.getCurrentUser();
+        Log.d("tag","User ID day ne: " + userId);
 
-        DocumentReference documentReference = fStore.collection("users").document(userId);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
-                if (documentSnapshot.exists()) {
-                    tvName.setText(documentSnapshot.getString("Tên"));
-                    tvEmail.setText(documentSnapshot.getString("Email"));
-                    tvAddress.setText(documentSnapshot.getString("Địa chỉ"));
-                    tvPhone.setText(documentSnapshot.getString("Số điện thoại"));
-                } else {
-                    Log.d("tag", " onEvent: Document do not exist.");
+        if (userId != null) {
+            DocumentReference documentReference = fStore.collection("users").document(userId);
+            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    // nếu user không còn đăng nhập thì exception sẽ khác null nên sẽ không thực hiện
+                    if (error == null) {
+                        if (documentSnapshot.exists()) {
+                            tvName.setText(documentSnapshot.getString("Tên"));
+                            tvEmail.setText(documentSnapshot.getString("Email"));
+                            tvAddress.setText(documentSnapshot.getString("Địa chỉ"));
+                            tvPhone.setText(documentSnapshot.getString("Số điện thoại"));
+                        } else {
+                            Log.d("tag", " onEvent: Document do not exist.");
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +97,7 @@ public class User extends AppCompatActivity {
     }
 
     public void logout(View v) {
+
         FirebaseAuth.getInstance().signOut();
         finishAffinity();
         startActivity(new Intent(getApplicationContext(), Login.class));
@@ -122,7 +129,6 @@ public class User extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.changeProfile:
                 // Cập nhật thông tin
-                //startActivity(new Intent(getApplicationContext(),UpdateProfile.class));
                 Intent i = new Intent(getApplicationContext(), UpdateProfile.class);
                 i.putExtra("email", tvEmail.getText());
                 i.putExtra("name", tvName.getText());

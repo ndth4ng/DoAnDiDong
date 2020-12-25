@@ -4,151 +4,154 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Pay"
-    android:background="#fafafa">
+    android:background="#fafafa"
+    tools:context=".Pay">
 
 
     <ImageButton
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:background="#fafafa"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"/>
-    <ImageButton
-        android:id="@+id/avt"
-        android:scaleType="fitXY"
-        android:src="@drawable/user"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="@drawable/custom_avatar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="Chi tiết đơn hàng"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="#000000"
         android:textSize="36dp"
         android:textStyle="bold"
-        android:layout_marginTop="60dp"
-        android:textColor="#000000"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/name"
+    <LinearLayout
+        android:id="@+id/profileLayout"
+        android:layout_marginTop="10dp"
         android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:hint="Nhập tên"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPay"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/custom_edittext"
-        android:padding="10dp"
-        />
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:hint="Nhập địa chỉ"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/custom_edittext"
-        android:padding="10dp"
-        />
-    <EditText
-        android:id="@+id/phone_number"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:hint="Nhập số điện thoại"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/custom_edittext"
-        android:padding="10dp"
-        />
+        app:layout_constraintTop_toBottomOf="@id/LdateTime">
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/ic_contact"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:text="Thắng" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:drawableLeft="@drawable/ic_address"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:text="Quận 10" />
+
+        <EditText
+            android:id="@+id/phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:text="0385411491" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sản phẩm:"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="370dp"
-        android:layout_height="200dp"
+        android:layout_height="230dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_number"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintTop_toBottomOf="@id/profileLayout" />
+
     <LinearLayout
         android:id="@+id/LdateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPay">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đơn hàng vào ngày 27/11/2020"
+            android:text="ĐƠN HÀNG NGÀY 25/11/2020"
             android:textColor="#000000"
-            android:textSize="20dp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="20dp" />
+
         <TextView
             android:id="@+id/dateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text=""
             android:textColor="#000000"
-            android:textSize="20dp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="20dp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/gd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hình thức giao dịch: tiền mặt"
-        app:layout_constraintTop_toBottomOf="@id/LdateTime"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        android:text="TÌNH TRẠNG: ĐÃ THANH TOÁN"
         android:textColor="#000000"
         android:textSize="18dp"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listView" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="horizontal"
-        android:layout_marginBottom="30dp">
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/gd"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
         <TextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tổng tiền: "
             android:textColor="#000000"
-            android:textSize="30dp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="30dp" />
+
         <TextView
             android:id="@+id/numTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="500"
+
+            android:text="0"
             android:textColor="#000000"
-            android:textSize="30dp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="30dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

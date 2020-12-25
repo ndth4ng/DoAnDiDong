@@ -4,30 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Cart"
-    android:background="#fafafa">
+    android:background="#fafafa"
+    tools:context=".Cart">
 
-    <ListView
-        android:id="@+id/listViewCart"
-        android:layout_width="match_parent"
-        android:layout_height="530dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="480dp"
+        tools:layout_editor_absoluteX="215dp"
+        tools:layout_editor_absoluteY="114dp" />
+
     <Button
         android:id="@+id/pay"
         android:layout_width="325dp"
         android:layout_height="73dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="80dp"
-        android:text="Tiến hành thanh toán"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/listView"
+        app:layout_constraintLeft_toLeftOf="@id/listView"
+        app:layout_constraintRight_toRightOf="@id/listView"
+        android:layout_marginTop="10dp"
         android:background="@drawable/custom_edittext"
-        />
+        android:text="Tiến hành thanh toán"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
