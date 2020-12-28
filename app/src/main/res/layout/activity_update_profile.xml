@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateProfile"
+    tools:context=".Activity.UpdateProfile"
     android:background="#fafafa">
 
     <ImageView
@@ -46,6 +46,7 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Nhập tên"
+            android:inputType="textPersonName"
             android:background="@drawable/custom_edittext"
             android:padding="10dp" />
 
@@ -53,16 +54,19 @@
             android:id="@+id/tvAddress"
             android:layout_width="325dp"
             android:layout_height="50dp"
-            android:hint="Nhập địa chỉ"
+            android:layout_marginTop="10dp"
             android:background="@drawable/custom_edittext"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"/>
+            android:hint="Nhập địa chỉ"
+            android:inputType="text"
+            android:ellipsize="start"
+            android:padding="10dp" />
 
         <EditText
             android:id="@+id/tvPhone"
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Số điện thoại"
+            android:inputType="number"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             android:layout_marginTop="10dp"/>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register"
+    tools:context=".Activity.Register"
     android:background="#fafafa">
     <TextView
         android:id="@+id/textView"
@@ -36,6 +36,7 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Nhập tên"
+            android:inputType="textPersonName"
             android:background="@drawable/custom_edittext"
             android:padding="10dp" />
 
@@ -44,6 +45,7 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Nhập email"
+            android:inputType="textEmailAddress"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             android:layout_marginTop="10dp" />
@@ -52,16 +54,18 @@
             android:id="@+id/edtPassword"
             android:layout_width="325dp"
             android:layout_height="50dp"
-            android:hint="Nhập mật khẩu"
+            android:layout_marginTop="10dp"
             android:background="@drawable/custom_edittext"
-            android:padding="10dp"
-            android:layout_marginTop="10dp" />
+            android:hint="Nhập mật khẩu"
+            android:inputType="textPassword"
+            android:padding="10dp" />
 
         <EditText
             android:id="@+id/edtConfirm"
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Xác nhận mật khẩu"
+            android:inputType="textPassword"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             android:layout_marginTop="10dp" />
@@ -71,6 +75,7 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Địa chỉ"
+            android:inputType="text"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             android:layout_marginTop="10dp" />
@@ -82,6 +87,8 @@
             android:hint="Số điện thoại"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
+            android:maxLines="1"
+            android:inputType="number"
             android:layout_marginTop="10dp"
             />
     </LinearLayout>

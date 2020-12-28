@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#fafafa"
     android:padding="15dp"
-    tools:context=".Search">
+    tools:context=".Fragment.Search">
 
     <LinearLayout
         android:id="@+id/search_bar"

@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductDetail"
+    tools:context=".Activity.ProductDetail"
     android:background="#fafafa">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_arrow_back_ios_24"
-        android:background="#fafafa"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:maxWidth="50dp"
+        android:src="@drawable/ic_close" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,7 +25,6 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:padding="15dp"
-        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
