@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
-    tools:context=".Pay">
+    tools:context=".Activity.Pay">
 
 
     <ImageButton
@@ -87,9 +87,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="San pham"
+            android:layout_weight="3"
             android:gravity="center"
-            android:layout_weight="3"/>
+            android:text="Sản phẩm" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,16 +101,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="So luong"
+            android:text="Số lượng"
             android:gravity="center"
             android:layout_weight="1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gia tien"
+            android:text="Giá tiền"
             android:gravity="center"
-            android:layout_weight="2"/>
+            android:layout_weight="3"/>
 
     </LinearLayout>
 

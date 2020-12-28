@@ -13,33 +13,33 @@
         android:supportsRtl="true"
         tools:replace="android:theme"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".BillDetails"
+        <activity android:name=".Activity.BillDetails"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Categories"
+        <activity android:name=".Activity.Categories"
             android:screenOrientation="portrait"/>
-        <activity android:name=".History"
+        <activity android:name=".Activity.History"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Pay"
+        <activity android:name=".Activity.Pay"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ProductDetail"
+        <activity android:name=".Activity.ProductDetail"
             android:screenOrientation="portrait"/>
-        <activity android:name=".User"
+        <activity android:name=".Activity.User"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Cart"
+        <activity android:name=".Fragment.Cart"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Search"
+        <activity android:name=".Fragment.Search"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Home"
+        <activity android:name=".Fragment.Home"
             android:screenOrientation="portrait"/>
-        <activity android:name=".loading"
+        <activity android:name=".Activity.loading"
             android:screenOrientation="portrait"/>
-        <activity android:name=".UpdateProfile"
+        <activity android:name=".Activity.UpdateProfile"
             android:screenOrientation="portrait"/>
-        <activity android:name=".UpdatePassword"
+        <activity android:name=".Activity.UpdatePassword"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Register"
+        <activity android:name=".Activity.Register"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Login"
+        <activity android:name=".Activity.Login"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Activity.MainActivity" />
     </application>
 
 </manifest>

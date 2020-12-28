@@ -52,6 +52,7 @@
             android:id="@+id/edtPassword"
             android:layout_width="325dp"
             android:layout_height="50dp"
+            android:inputType="textPassword"
             android:hint="Nhập mật khẩu"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
