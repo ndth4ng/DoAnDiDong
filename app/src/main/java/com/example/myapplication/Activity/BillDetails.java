@@ -18,10 +18,14 @@ import com.example.myapplication.Model.HistoryItem;
 import com.example.myapplication.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.SnapshotParser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -29,7 +33,7 @@ import java.util.Locale;
 
 public class BillDetails extends AppCompatActivity {
 
-    TextView nameCus, addressCus, phoneCus, timeBill, totalPrice;
+    TextView nameCus, addressCus, phoneCus, timeBill, totalPrice, idBill;
     ImageView back;
 
     RecyclerView recyclerView;
@@ -59,8 +63,8 @@ public class BillDetails extends AppCompatActivity {
         HistoryItem item = (HistoryItem) data.getSerializableExtra("customer");
 
         getInfor(item);
-
         getList(item);
+        getTotal(item);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +82,7 @@ public class BillDetails extends AppCompatActivity {
         Locale locale = new Locale("vn","VN");
         DateFormat dateFormat = DateFormat.getDateTimeInstance(2,3,locale);
         timeBill.setText(dateFormat.format(item.getTime()));
+        idBill.setText("Mã đơn hàng: " + item.getItemId());
     }
 
     public void AnhXa() {
@@ -87,6 +92,7 @@ public class BillDetails extends AppCompatActivity {
         addressCus = findViewById(R.id.address);
         phoneCus = findViewById(R.id.phone_number);
 
+        idBill = findViewById(R.id.idBill);
         timeBill = findViewById(R.id.timeBill);
         totalPrice = findViewById(R.id.totalPrice);
 
@@ -96,8 +102,6 @@ public class BillDetails extends AppCompatActivity {
     public void getList(HistoryItem item) {
         if (userId != null) {
             Query query = fStore.collection("users").document(userId).collection("HistoryBills").document(item.getItemId()).collection(item.getItemId());
-            total = 0;
-
             FirestoreRecyclerOptions<CartItem> options = new FirestoreRecyclerOptions.Builder<CartItem>()
                     .setLifecycleOwner(this)
                     .setQuery(query, new SnapshotParser<CartItem>() {
@@ -106,13 +110,6 @@ public class BillDetails extends AppCompatActivity {
                         public CartItem parseSnapshot(@NonNull DocumentSnapshot snapshot) {
                             CartItem cartItem = snapshot.toObject(CartItem.class);
                             String itemId = snapshot.getId();
-
-                            total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
-
-                            Locale locale = new Locale("vn","VN");
-                            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-                            totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));
-
                             cartItem.setItemId(itemId);
                             return cartItem;
                         }
@@ -129,6 +126,26 @@ public class BillDetails extends AppCompatActivity {
 
             recyclerView.setAdapter(billAdapter);
         }
+    }
+
+    private void getTotal(HistoryItem item) {
+        total = 0;
+        fStore.collection("users").document(userId).collection("HistoryBills").document(item.getItemId()).collection(item.getItemId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot snapshot : task.getResult()) {
+                        //Toast.makeText(Pay.this,snapshot.getId(),Toast.LENGTH_SHORT).show();
+                        Log.d("TAG","Snapshot ID: " +snapshot.getId());
+                        total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
+
+                        Locale locale = new Locale("vn","VN");
+                        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+                        totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));
+                    }
+                }
+            }
+        });
     }
 
     @Override

@@ -7,25 +7,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Adapter.HistoryAdapter;
 import com.example.myapplication.Model.HistoryItem;
 import com.example.myapplication.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.SnapshotParser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class History extends AppCompatActivity implements HistoryAdapter.OnListItemClick {
 
     ImageButton back;
-    TextView tvHistory;
+    Button delHistory;
 
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
@@ -33,6 +41,8 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
 
     HistoryAdapter historyAdapter;
     String userId;
+
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +57,33 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
         userId = fAuth.getCurrentUser().getUid();
 
         getList();
+
+        delHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (doubleBackToExitPressedOnce) {
+                    deleteHistoryBill();
+                    Log.d("TAG","Delete History Bill");
+                    return;
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(History.this, "Bấm lần nữa để xóa lich sử đặt hàng", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 2000);
+            }
+        });
     }
 
     void AnhXa() {
         recyclerView = findViewById(R.id.recycleViewHistory);
+        delHistory = findViewById(R.id.delHistory);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +98,7 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
 
     void getList() {
         if (userId != null ) {
-            Query query = fStore.collection("users").document(userId).collection("HistoryBills");
+            Query query = fStore.collection("users").document(userId).collection("HistoryBills").orderBy("time", Query.Direction.DESCENDING);
 
             FirestoreRecyclerOptions<HistoryItem> options = new FirestoreRecyclerOptions.Builder<HistoryItem>()
                     .setLifecycleOwner(this)
@@ -99,6 +132,19 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
         }
     }
 
+    private void deleteHistoryBill() {
+        fStore.collection("users").document(userId).collection("HistoryBills").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        Log.d("TAG","Snapshot ID ne: "+snapshot.getId());
+                        fStore.collection("users").document(userId).collection("HistoryBills").document(snapshot.getId()).delete();
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void onItemClick(HistoryItem snapshot, int position) {

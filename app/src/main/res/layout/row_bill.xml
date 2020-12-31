@@ -3,21 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
     app:cardElevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageProduct"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/ic_launcher_background" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,37 +34,59 @@
 
                 <TextView
                     android:id="@+id/nameProduct"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/sizeProduct"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="S"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    />
-
-                <TextView
-                    android:id="@+id/quantityProduct"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:gravity="center" />
-
-                <TextView
-                    android:id="@+id/priceProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="TextView" />
+                    android:textAllCaps="true"
+                    android:text="TextView"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/sizeProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Size: "
+                android:textStyle="italic" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="Số lượng: " />
+
+                <TextView
+                    android:id="@+id/quantityProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/priceProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="TextView"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>

@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -35,7 +37,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams = (CoordinatorLayout.LayoutParams) bottomNav.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehaviour());
 
-        drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        //drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
@@ -143,7 +147,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    int cartSize = task.getResult().size();
+                    int cartSize = 0;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        cartSize += Integer.parseInt(document.get("amount").toString());
+                    }
                     BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.cart);
                     badge.setVisible(true);
 
@@ -166,12 +173,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(Gravity.LEFT);
         } else {
-            super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Bấm lần nữa để thoát", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 
@@ -263,19 +286,15 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.home:
                             viewPager.setCurrentItem(0);
-
                             break;
                         case R.id.wishlist:
                             viewPager.setCurrentItem(1);
-
                             break;
                         case R.id.search:
                             viewPager.setCurrentItem(2);
-
                             break;
                         case R.id.cart:
                             viewPager.setCurrentItem(3);
@@ -297,4 +316,6 @@ public class MainActivity extends AppCompatActivity {
     public void setFragment(int itemID) {
         viewPager.setCurrentItem(itemID);
     }
+
+
 }

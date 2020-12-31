@@ -42,6 +42,9 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //Algolia Seach
+    implementation 'com.algolia:algoliasearch-android:3.+'
+
     //Paging
     implementation 'androidx.paging:paging-runtime:2.1.2'
 

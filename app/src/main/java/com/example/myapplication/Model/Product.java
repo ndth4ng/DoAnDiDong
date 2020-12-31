@@ -13,6 +13,14 @@ public class Product implements Serializable {
     }
 
     private String itemId;
+
+    public Product(String itemId, String image, String name, long price) {
+        this.itemId = itemId;
+        this.image = image;
+        this.name = name;
+        this.price = price;
+    }
+
     private String cate;
     private String detail;
     private String image;

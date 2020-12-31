@@ -27,13 +27,19 @@ import com.example.myapplication.Activity.ProductDetail;
 import com.example.myapplication.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.SnapshotParser;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     View view;
@@ -46,7 +52,6 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     Button btnPay;
 
     private static final int REQUEST_CODE_BADGE = 300;
-    //private static final int REQUEST_CODE_PAY = 300;
 
     @Nullable
     @Override
@@ -132,7 +137,7 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Khong the lay du lieu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Sản phẩm này không tồn tại", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -168,12 +173,13 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     public void onDelClick(CartItem snapshot, int position) {
         fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).delete();
         getList();
-        Toast.makeText(getActivity(), "Xoa khoi cart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Xóa sản phẩm khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onValueChangeClick(CartItem snapshot, int position, long newValue) {
         fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).update("amount", newValue);
-        Toast.makeText(getActivity(), "Product ID:" + snapshot.getItemId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Product ID:" + snapshot.getItemId(), Toast.LENGTH_SHORT).show();
+        ((MainActivity)getActivity()).getBadge();
     }
 }

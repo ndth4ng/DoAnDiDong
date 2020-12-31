@@ -45,28 +45,6 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<Product, Firestor
         return new ProductViewHolder(view);
     }
 
-    /*@Override
-    protected void onLoadingStateChanged(@NonNull LoadingState state) {
-        super.onLoadingStateChanged(state);
-        switch (state) {
-            case LOADING_INITIAL:
-                Log.d("PAGING_LOG","Bắt đầu hiển thị sản phẩm");
-                break;
-            case LOADING_MORE:
-                Log.d("PAGING_LOG","Hiển thị sản phẩm tiếp theo.");
-                break;
-            case FINISHED:
-                Log.d("PAGING_LOG","Đã hiển thị tất cả sản phẩm.");
-                break;
-            case ERROR:
-                Log.d("PAGING_LOG","Lỗi hiển thị dữ liệu.");
-                break;
-            case LOADED:
-                Log.d("PAGING_LOG","Tổng số sản phẩm : " + getItemCount());
-                break;
-        }
-    }*/
-
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imgProduct;

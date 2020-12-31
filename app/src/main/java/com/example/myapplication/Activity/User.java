@@ -131,7 +131,7 @@ public class User extends AppCompatActivity {
                 i.putExtra("address", tvAddress.getText());
                 i.putExtra("phone", tvPhone.getText());
                 startActivity(i);
-                //finish();
+                finish();
                 break;
             case R.id.changePassword:
                 // Cập nhật mật khẩu

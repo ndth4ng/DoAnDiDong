@@ -23,10 +23,11 @@
             android:layout_marginRight="15dp"/>
 
         <EditText
-            android:id="@+id/searchView"
+            android:id="@+id/edtSearch"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="99"
+            android:inputType="text"
             android:background="@drawable/custom_search"
             android:hint="Tìm kiếm..." />
 

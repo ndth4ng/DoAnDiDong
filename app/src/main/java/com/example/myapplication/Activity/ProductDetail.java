@@ -38,7 +38,6 @@ public class ProductDetail extends AppCompatActivity {
     ImageView imageProduct, back, inc, dec, favorite;
     TextView nameProduct, detailProduct, priceProduct, quantity;
     Button add;
-    RadioButton r_s, r_m, r_l;
     RadioGroup size_group;
     String size_product = "M";
 
@@ -92,7 +91,7 @@ public class ProductDetail extends AppCompatActivity {
                                     public void onSuccess(DocumentSnapshot snapshot) {
                                         fStore.collection("users").document(userID).collection("Favorites").document(product.getItemId()).delete();
                                         favorite.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                                        Toast.makeText(ProductDetail.this,"Xóa sp khỏi ds yêu thích",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProductDetail.this,"Đã xóa sản phẩm khỏi danh sách yêu thích của bạn",Toast.LENGTH_SHORT).show();
                                         Log.d("TAG", "Delete Product ID: " + snapshot.getId() + " from Favorites");
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -112,9 +111,9 @@ public class ProductDetail extends AppCompatActivity {
                                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot snapshot) {
-                                        fStore.collection("users").document(userID).collection("Favorites").document(product.getItemId()).set(product);
+                                        fStore.collection("users").document(userID).collection("Favorites").add(product);
                                         favorite.setImageResource(R.drawable.ic_baseline_favorite_24);
-                                        Toast.makeText(ProductDetail.this,"Thêm sp vào ds yêu thích",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProductDetail.this,"Đã thêm sản phẩm này vào danh sách yêu thích của bạn",Toast.LENGTH_SHORT).show();
                                         Log.d("TAG", "Add Product ID: " + snapshot.getId() + " to Favorites");
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -166,15 +165,15 @@ public class ProductDetail extends AppCompatActivity {
                 switch (i) {
                     case (R.id.size_S) :
                         size_product = "S";
-                        Toast.makeText(ProductDetail.this,"S",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetail.this,"S",Toast.LENGTH_SHORT).show();
                         break;
                     case (R.id.size_M) :
                         size_product = "M";
-                        Toast.makeText(ProductDetail.this,"M",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetail.this,"M",Toast.LENGTH_SHORT).show();
                         break;
                     case (R.id.size_L) :
                         size_product = "L";
-                        Toast.makeText(ProductDetail.this,"L",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetail.this,"L",Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -207,7 +206,7 @@ public class ProductDetail extends AppCompatActivity {
 
                         fStore.collection("users").document(userID).collection("Cart").document(snapshot.getId()).update("amount",newValue3);
 
-                        Toast.makeText(ProductDetail.this,"Old amount: " + newValue + " Add amount: " + newValue2 + " Total: " + newValue3, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetail.this,"Đã thêm sản phẩm vào giỏ hàng",Toast.LENGTH_SHORT).show();
                     } else {
                         CartItem cartItem = new CartItem(pro.getName(),pro.getImage(),pro.getPrice(),pro.getItemId());
                         cartItem.setAmount(Long.valueOf(quantity.getText().toString()));
@@ -215,7 +214,7 @@ public class ProductDetail extends AppCompatActivity {
 
                         fStore.collection("users").document(userID).collection("Cart").document(cartItem.getItemId().concat(size_product)).set(cartItem);
 
-                        Toast.makeText(ProductDetail.this,"Thêm sp vào Cart",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetail.this,"Đã thêm sản phẩm vào giỏ hàng",Toast.LENGTH_SHORT).show();
                     }
                 }
             }

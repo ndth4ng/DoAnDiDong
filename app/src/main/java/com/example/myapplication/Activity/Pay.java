@@ -9,11 +9,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Adapter.BillAdapter;
 import com.example.myapplication.Model.CartItem;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -56,6 +59,7 @@ public class Pay extends AppCompatActivity {
 
     long total = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +75,8 @@ public class Pay extends AppCompatActivity {
         //Toast.makeText(Pay.this, "User ID: " + userId, Toast.LENGTH_SHORT).show();
 
         getInfor();
-
         getList();
+        getTotal();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +138,7 @@ public class Pay extends AppCompatActivity {
                         item.put("size",document.get("size"));
                         item.put("amount",document.get("amount"));
                         item.put("price",document.get("price"));
+                        item.put("image",document.get("image"));
 
                         historyRef.document(doc.getId())
                                 .collection(doc.getId())
@@ -198,10 +203,29 @@ public class Pay extends AppCompatActivity {
         });
     }
 
+    private void getTotal() {
+        total = 0;
+        fStore.collection("users").document(userId).collection("Cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot snapshot : task.getResult()) {
+                        //Toast.makeText(Pay.this,snapshot.getId(),Toast.LENGTH_SHORT).show();
+                        Log.d("TAG","Snapshot ID: " +snapshot.getId());
+                        total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
+
+                        Locale locale = new Locale("vn","VN");
+                        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+                        totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));
+                    }
+                }
+            }
+        });
+    }
+
     public void getList() {
         if (userId != null) {
-            Query query = fStore.collection("users").document(userId).collection("Cart").orderBy("size");
-            total = 0;
+            Query query = fStore.collection("users").document(userId).collection("Cart").orderBy("name");
 
             FirestoreRecyclerOptions<CartItem> options = new FirestoreRecyclerOptions.Builder<CartItem>()
                     .setLifecycleOwner(this)
@@ -211,13 +235,6 @@ public class Pay extends AppCompatActivity {
                         public CartItem parseSnapshot(@NonNull DocumentSnapshot snapshot) {
                             CartItem cartItem = snapshot.toObject(CartItem.class);
                             String itemId = snapshot.getId();
-
-                            total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
-
-                            Locale locale = new Locale("vn","VN");
-                            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-                            totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));
-
                             cartItem.setItemId(itemId);
                             return cartItem;
                         }
@@ -229,9 +246,7 @@ public class Pay extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
             recyclerView.setLayoutManager(linearLayoutManager);
-
             recyclerView.setAdapter(billAdapter);
         }
     }
