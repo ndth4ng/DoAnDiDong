@@ -111,7 +111,7 @@ public class ProductDetail extends AppCompatActivity {
                                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot snapshot) {
-                                        fStore.collection("users").document(userID).collection("Favorites").add(product);
+                                        fStore.collection("users").document(userID).collection("Favorites").document(product.getItemId()).set(product);
                                         favorite.setImageResource(R.drawable.ic_baseline_favorite_24);
                                         Toast.makeText(ProductDetail.this,"Đã thêm sản phẩm này vào danh sách yêu thích của bạn",Toast.LENGTH_SHORT).show();
                                         Log.d("TAG", "Add Product ID: " + snapshot.getId() + " to Favorites");
