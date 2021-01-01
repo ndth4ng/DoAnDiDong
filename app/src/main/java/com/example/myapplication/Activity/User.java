@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -79,7 +82,7 @@ public class User extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), History.class);
-                startActivity(intent);
+                startActivityForResult(intent, 321);
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
@@ -93,10 +96,9 @@ public class User extends AppCompatActivity {
     }
 
     public void logout(View v) {
-
         FirebaseAuth.getInstance().signOut();
         finishAffinity();
-        startActivity(new Intent(getApplicationContext(), Login.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     protected void AnhXa() {
@@ -148,5 +150,14 @@ public class User extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 }

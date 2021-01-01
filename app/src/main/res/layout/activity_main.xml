@@ -59,7 +59,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/bottom_nav"
             app:menu="@menu/bottom_nav"
-            app:layout_behavior=".Helper.BottomNavigationBehaviour"
             android:theme="@style/Theme.MaterialComponents"
             app:itemTextColor="#000"
             app:itemIconTint="#000"

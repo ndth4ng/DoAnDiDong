@@ -1,10 +1,12 @@
 package com.example.myapplication.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -150,7 +152,7 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
     public void onItemClick(HistoryItem snapshot, int position) {
         Intent i = new Intent(getApplicationContext(), BillDetails.class);
         i.putExtra("customer",snapshot);
-        startActivity(i);
+        startActivityForResult(i,321);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
@@ -158,5 +160,14 @@ public class History extends AppCompatActivity implements HistoryAdapter.OnListI
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 }

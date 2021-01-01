@@ -4,22 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.User"
-    android:background="#f5f5f5">
+    android:background="#f5f5f5"
+    tools:context=".Activity.User">
 
     <include
-        layout="@layout/action_bar"
-        android:id="@+id/acction_bar"/>
+        android:id="@+id/acction_bar"
+        layout="@layout/action_bar">
+    </include>
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/ic_baseline_arrow_back_ios_24"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp" />
+
+
     <!--
         <ImageView
             android:id="@+id/setting"
@@ -39,90 +33,90 @@
         android:background="@drawable/user"
 
         app:layout_constraintBottom_toTopOf="@id/layout"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/avt"
+        android:layout_marginTop="120dp"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textStyle="bold"
-        android:layout_marginTop="120dp"
-        android:textSize="25sp"
-        android:textColor="#000000"/>
+        app:layout_constraintTop_toTopOf="@+id/avt" />
 
     <LinearLayout
         android:id="@id/layout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:layout_constraintBottom_toTopOf="@id/logout"
-        android:layout_marginBottom="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical"
         android:padding="20dp"
-        android:orientation="vertical">
+        app:layout_constraintBottom_toTopOf="@id/logout">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email:"
-            android:textSize="18sp"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_marginTop="5dp"
-            android:textColor="#000000"/>
+            android:text=""
+            android:textColor="#000000" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Số điện thoại:"
-            android:textSize="18sp"
             android:layout_marginTop="10dp"
-            android:textColor="#000000"/>
+            android:text="Số điện thoại:"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_marginTop="5dp"
-            android:textColor="#000000"/>
+            android:text=""
+            android:textColor="#000000" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Địa chỉ:"
-            android:textSize="18sp"
             android:layout_marginTop="10dp"
-            android:textColor="#000000"/>
+            android:text="Địa chỉ:"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_marginTop="5dp"
-            android:textColor="#000000"/>
+            android:text=""
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/RHistoryy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lịch sử mua hàng:"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:textStyle="bold"
             android:layout_marginTop="40dp"
-            android:drawableRight="@drawable/ic_baseline_navigate_next_24" />
-
+            android:drawableRight="@drawable/ic_baseline_navigate_next_24"
+            android:text="Lịch sử mua hàng:"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
@@ -131,14 +125,13 @@
         android:id="@+id/logout"
         android:layout_width="325dp"
         android:layout_height="73dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="30dp"
+        android:background="@drawable/custom_edittext"
         android:text="Đăng xuất"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:background="@drawable/custom_edittext"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

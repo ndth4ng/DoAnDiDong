@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.myapplication.Activity.Login;
 import com.example.myapplication.Adapter.CartAdapter;
 import com.example.myapplication.Activity.MainActivity;
 import com.example.myapplication.Model.CartItem;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -63,19 +65,26 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-        userId = fAuth.getCurrentUser().getUid();
+        final FirebaseUser currentUser = fAuth.getCurrentUser();
 
-        getList();
+        if (currentUser != null) {
+            userId = fAuth.getCurrentUser().getUid();
 
-        btnPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), Pay.class);
-                startActivityForResult(i, REQUEST_CODE_BADGE);
-                getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-            }
-        });
+            getList();
 
+            btnPay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentUser.isAnonymous()) {
+                        startActivityForResult(new Intent(getContext(), Login.class), 111);
+                    } else {
+                        Intent i = new Intent(getActivity(), Pay.class);
+                        startActivityForResult(i, REQUEST_CODE_BADGE);
+                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }
+                }
+            });
+        }
         return view;
     }
 
@@ -163,9 +172,14 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         }
 
         if (requestCode == REQUEST_CODE_BADGE && resultCode == 255) {
-            ((MainActivity)getActivity()).setFragment(0);
+            ((MainActivity) getActivity()).setFragment(0);
             //Quay ve Home
-            Toast.makeText(getActivity(),"Đặt hàng thành công, bạn có thể xem các đơn hàng trong Lịch sử đặt hàng",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Đặt hàng thành công, bạn có thể xem các đơn hàng trong Lịch sử đặt hàng", Toast.LENGTH_SHORT).show();
+        }
+
+        // Anony => Ng dung login => Main => Cart
+        if (requestCode == 111 & resultCode == Activity.RESULT_OK) {
+            getActivity().finish();
         }
     }
 
@@ -180,6 +194,6 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     public void onValueChangeClick(CartItem snapshot, int position, long newValue) {
         fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).update("amount", newValue);
         //Toast.makeText(getActivity(), "Product ID:" + snapshot.getItemId(), Toast.LENGTH_SHORT).show();
-        ((MainActivity)getActivity()).getBadge();
+        ((MainActivity) getActivity()).getBadge();
     }
 }

@@ -13,4 +13,14 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="163dp"
         tools:layout_editor_absoluteY="218dp" />
+
+    <TextView
+        android:id="@+id/unText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vui lòng đăng nhập để hiển thị danh sách yêu thích"
+        android:textAllCaps="true"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,7 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Nhập email"
+            android:inputType="textEmailAddress"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             />

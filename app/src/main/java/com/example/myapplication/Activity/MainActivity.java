@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,14 +30,19 @@ import com.example.myapplication.Fragment.Wishlist;
 import com.example.myapplication.Helper.BottomNavigationBehaviour;
 import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPagerAdapter viewPagerAdapter;
 
+    FirebaseUser currentUser;
 
     private static final int REQUEST_CODE_BADGE = 300;
 
@@ -67,10 +74,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AnhXa();
-
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+
+        currentUser = fAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            fAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d("TAG", "signInAnonymously:success");
+                        currentUser = fAuth.getCurrentUser();
+                        Log.d("TAG", "signInAnonymously: "+currentUser.getUid());
+                    } else {
+                        Log.d("TAG", "signInAnonymously:fail");
+                    }
+                }
+            });
+        }
+
+        AnhXa();
 
         actionToolBar();
 
@@ -78,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new Home()).commit();
         }
-
-        layoutParams = (CoordinatorLayout.LayoutParams) bottomNav.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBehaviour());
+        //layoutParams = (CoordinatorLayout.LayoutParams) bottomNav.getLayoutParams();
+        //layoutParams.setBehavior(new BottomNavigationBehaviour());
 
         //drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
@@ -91,13 +114,17 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
 
-        getBadge();
+        //getBadge();
 
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), User.class));
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                if (!currentUser.isAnonymous()) {
+                    startActivityForResult(new Intent(getApplicationContext(), User.class), 321);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                } else {
+                    startActivityForResult(new Intent(getApplicationContext(),Login.class), 111);
+                }
             }
         });
 
@@ -112,24 +139,21 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0: {
                         bottomNav.getMenu().findItem(R.id.home).setChecked(true);
-                        layoutParams.setBehavior(new BottomNavigationBehaviour());
                     }
-                        break;
+                    break;
                     case 1: {
                         bottomNav.getMenu().findItem(R.id.wishlist).setChecked(true);
-                        layoutParams.setBehavior(new BottomNavigationBehaviour());
                     }
-                        break;
+                    break;
                     case 2: {
                         bottomNav.getMenu().findItem(R.id.search).setChecked(true);
-                        layoutParams.setBehavior(new BottomNavigationBehaviour());
                     }
-                        break;
+                    break;
                     case 3: {
                         bottomNav.getMenu().findItem(R.id.cart).setChecked(true);
-                        layoutParams.setBehavior(null);
+                        //layoutParams.setBehavior(null);
                     }
-                        break;
+                    break;
                 }
             }
 
@@ -141,29 +165,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getBadge() {
-        String userID = fAuth.getCurrentUser().getUid();
-        CollectionReference collectRef = fStore.collection("users").document(userID).collection("Cart");
-        collectRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    int cartSize = 0;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        cartSize += Integer.parseInt(document.get("amount").toString());
-                    }
-                    BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.cart);
-                    badge.setVisible(true);
+        if (fAuth.getCurrentUser() != null) {
+            String userID = fAuth.getCurrentUser().getUid();
+            CollectionReference collectRef = fStore.collection("users").document(userID).collection("Cart");
+            collectRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        int cartSize = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            cartSize += Integer.parseInt(document.get("amount").toString());
+                        }
+                        BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.cart);
+                        badge.setVisible(true);
 
-                    if (cartSize != 0){
-                        badge.setNumber(cartSize);
-                    } else {
-                        badge.setVisible(false);
+                        if (cartSize != 0) {
+                            badge.setNumber(cartSize);
+                        } else {
+                            badge.setVisible(false);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
-
     void actionToolBar() {
         menu_left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce=false;
+                    doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
         }
@@ -217,64 +242,64 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.tshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "tshirt");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.longshirt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longshirt");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.jacket: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "jacket");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.somi: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "somi");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.shortpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "shortpant");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.longpant: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "longpant");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.hat: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "hat");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.socks: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "socks");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                         case R.id.belt: {
                             Intent intent = new Intent(getApplicationContext(), Categories.class);
                             intent.putExtra("cate", "belt");
-                            startActivityForResult(intent,REQUEST_CODE_BADGE);
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            startActivityForResult(intent, REQUEST_CODE_BADGE);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             break;
                         }
                     }
@@ -311,11 +336,18 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK) {
             getBadge();
         }
+
+        if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
+            getBadge();
+            setFragment(3);
+        }
+
+        if (requestCode == 111 && resultCode == Activity.RESULT_OK) {
+            finish();
+        }
     }
 
     public void setFragment(int itemID) {
         viewPager.setCurrentItem(itemID);
     }
-
-
 }

@@ -210,10 +210,7 @@ public class Pay extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot snapshot : task.getResult()) {
-                        //Toast.makeText(Pay.this,snapshot.getId(),Toast.LENGTH_SHORT).show();
-                        Log.d("TAG","Snapshot ID: " +snapshot.getId());
                         total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
-
                         Locale locale = new Locale("vn","VN");
                         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
                         totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));

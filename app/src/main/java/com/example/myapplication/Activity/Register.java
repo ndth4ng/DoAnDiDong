@@ -3,6 +3,7 @@ package com.example.myapplication.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,8 +18,11 @@ import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -43,9 +47,15 @@ public class Register extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-        if (fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            finish();
+        final FirebaseUser user = fAuth.getCurrentUser();
+
+        if (user == null) {
+            return;
+        } else {
+            if (!user.isAnonymous()) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            }
         }
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -89,34 +99,11 @@ public class Register extends AppCompatActivity {
                 }
 
                 // Đăng ký trên Firebase
-
-                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Register.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                            userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("Tên",name);
-                            user.put("Email",email);
-                            user.put("Địa chỉ",address);
-                            user.put("Số điện thoại",phone);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("TAG", "Tạo profile thành công cho " + userID);
-                                }
-                            });
-
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                            finish();
-                        }
-                        else {
-                            Toast.makeText(Register.this, "Email đã tồn tại hoặc không đúng!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                if (user == null) {
+                    NormalRegister(email,password,name,address,phone);
+                } else {
+                    ConvertRegister(email,password,name,address,phone);
+                }
 
             }
         });
@@ -126,6 +113,77 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
+            }
+        });
+    }
+
+    private void ConvertRegister(final String email, String password, final String name, final String address, final String phone) {
+        // Đăng ký trên Firebase
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+        fAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", "linkWithCredential:success");
+
+                            userID = fAuth.getCurrentUser().getUid();
+                            DocumentReference documentReference = fStore.collection("users").document(userID);
+
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("Tên", name);
+                            user.put("Email", email);
+                            user.put("Địa chỉ", address);
+                            user.put("Số điện thoại", phone);
+
+                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("TAG", "Tạo profile thành công cho " + userID);
+                                }
+                            });
+
+                            setResult(Register.RESULT_OK);
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            finish();
+
+                        } else {
+                            //Log.d("TAG", "linkWithCredential:failure", task.getException());
+                            edtEmail.setError("Email đã tồn tại hoặc không đúng định dạng");
+                        }
+                    }
+                });
+    }
+
+    private void NormalRegister(final String email, String password, final String name, final String address, final String phone) {
+        fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(Register.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                    userID = fAuth.getCurrentUser().getUid();
+                    DocumentReference documentReference = fStore.collection("users").document(userID);
+
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("Tên",name);
+                    user.put("Email",email);
+                    user.put("Địa chỉ",address);
+                    user.put("Số điện thoại",phone);
+
+                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "Tạo profile thành công cho " + userID);
+                        }
+                    });
+
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
+                }
+                else {
+                    edtEmail.setError("Email đã tồn tại hoặc không đúng định dạng");
+                }
             }
         });
     }

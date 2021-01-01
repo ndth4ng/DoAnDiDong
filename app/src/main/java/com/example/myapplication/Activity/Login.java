@@ -1,9 +1,11 @@
 package com.example.myapplication.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,19 +38,6 @@ public class Login extends AppCompatActivity {
 
         AnhXa();
 
-        FirebaseUser user = null;
-
-        user = fAuth.getCurrentUser();
-
-        if (user != null) {
-            Toast.makeText(this,"Bạn đã đăng nhập từ trước.",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            finish();
-        } else {
-            Toast.makeText(this,"Hãy đăng nhập.",Toast.LENGTH_SHORT).show();
-        }
-
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,11 +55,6 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                /*if (password.length() < 8) {
-                    edtPassword.setError("Mật khẩu phải từ 8 ký tự!");
-                    return;
-                }*/
-
                 // Đăng nhập
 
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -79,6 +63,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            setResult(Activity.RESULT_OK);
                             finish();
                         } else {
                             Toast.makeText(Login.this, "Email hoặc mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
@@ -93,7 +78,7 @@ public class Login extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivityForResult(new Intent(getApplicationContext(),Register.class), 111);
             }
         });
 
@@ -145,5 +130,14 @@ public class Login extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         tvReset = findViewById(R.id.tvReset);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 111 & resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 }

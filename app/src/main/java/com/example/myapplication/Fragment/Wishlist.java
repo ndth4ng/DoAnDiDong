@@ -10,10 +10,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Adapter.WishlistAdapter;
@@ -26,6 +28,7 @@ import com.firebase.ui.firestore.SnapshotParser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -35,6 +38,7 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    TextView unText;
 
     String userId;
 
@@ -52,19 +56,31 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-        userId = fAuth.getCurrentUser().getUid();
+        FirebaseUser user = fAuth.getCurrentUser();
 
-        getList();
+        if (user == null) {
+
+        } else {
+            if (user.isAnonymous()) {
+                unText.setVisibility(View.VISIBLE);
+            }  else {
+                unText.setVisibility(View.INVISIBLE);
+                getList();
+            }
+        }
+        //Toast.makeText(getActivity(),"User ID: "+ fAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT).show();
 
         return view;
     }
 
     public void AnhXa() {
         recyclerView = view.findViewById(R.id.wishlist);
+        unText = view.findViewById(R.id.unText);
     }
 
     public void getList() {
-        if (userId != null) {
+
+            userId = fAuth.getCurrentUser().getUid();
             Query query = fStore.collection("users").document(userId).collection("Favorites");
 
             FirestoreRecyclerOptions<Product> options = new FirestoreRecyclerOptions.Builder<Product>()
@@ -93,7 +109,6 @@ public class Wishlist extends Fragment implements WishlistAdapter.OnListItemClic
 
             ((MainActivity)getActivity()).getBadge();
         }
-    }
 
     @Override
     public void onItemClick(Product snapshot, int position) {
