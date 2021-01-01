@@ -132,8 +132,7 @@ public class User extends AppCompatActivity {
                 i.putExtra("name", tvName.getText());
                 i.putExtra("address", tvAddress.getText());
                 i.putExtra("phone", tvPhone.getText());
-                startActivity(i);
-                finish();
+                startActivityForResult(i,0);
                 break;
             case R.id.changePassword:
                 // Cập nhật mật khẩu
@@ -158,6 +157,10 @@ public class User extends AppCompatActivity {
         if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
             setResult(Activity.RESULT_OK);
             finish();
+        }
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            finish();
+            startActivity(new Intent(getApplicationContext(),User.class));;
         }
     }
 }

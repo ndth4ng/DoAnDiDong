@@ -45,6 +45,8 @@
             android:id="@+id/tvName"
             android:layout_width="325dp"
             android:layout_height="50dp"
+            android:drawableLeft="@drawable/ic_contact"
+            android:drawablePadding="10dp"
             android:hint="Nhập tên"
             android:inputType="textPersonName"
             android:background="@drawable/custom_edittext"
@@ -57,6 +59,8 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/custom_edittext"
             android:hint="Nhập địa chỉ"
+            android:drawableLeft="@drawable/ic_address"
+            android:drawablePadding="10dp"
             android:inputType="text"
             android:ellipsize="start"
             android:padding="10dp" />
@@ -67,6 +71,8 @@
             android:layout_height="50dp"
             android:hint="Số điện thoại"
             android:inputType="number"
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawablePadding="10dp"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
             android:layout_marginTop="10dp"/>

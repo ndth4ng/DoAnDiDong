@@ -44,6 +44,8 @@
             android:layout_width="325dp"
             android:layout_height="50dp"
             android:hint="Nhập email"
+            android:drawableLeft="@drawable/ic_mail"
+            android:drawablePadding="10dp"
             android:inputType="textEmailAddress"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
@@ -57,6 +59,8 @@
             android:hint="Nhập mật khẩu"
             android:background="@drawable/custom_edittext"
             android:padding="10dp"
+            android:drawableLeft="@drawable/ic__lock"
+            android:drawablePadding="10dp"
             android:layout_marginTop="10dp"
             />
     </LinearLayout>

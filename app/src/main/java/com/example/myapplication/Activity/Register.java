@@ -70,12 +70,7 @@ public class Register extends AppCompatActivity {
                 final String phone = edtPhone.getText().toString();
 
                 if (TextUtils.isEmpty((email))) {
-                    edtEmail.setError("Email không được để trống!");
-                    return;
-                }
-
-                if (TextUtils.isEmpty((password))) {
-                    edtPassword.setError("Mật khẩu không được để trống!");
+                    edtEmail.setError("Chọn một địa chỉ Email");
                     return;
                 }
 
@@ -89,7 +84,7 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
-                if (!password.equals(confirm)) {
+                if (!confirm.equals(password)) {
                     edtPassword.setError("Mật khẩu không giống nhau!");
                 }
 
@@ -111,7 +106,7 @@ public class Register extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                //startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
             }
         });
@@ -144,8 +139,9 @@ public class Register extends AppCompatActivity {
                                 }
                             });
 
-                            setResult(Register.RESULT_OK);
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            setResult(Register.RESULT_CANCELED);
+                            Toast.makeText(Register.this,"Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             finish();
 
                         } else {

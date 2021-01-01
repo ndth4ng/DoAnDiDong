@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -88,17 +89,27 @@ public class Pay extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateBill();
-                setResult(255);
-                //finish();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 1000); // 5000ms delay
+                if (TextUtils.isEmpty(nameUser.getText())) {
+                    nameUser.setError("Vui lòng nhập tên của bạn.");
+                } else if (TextUtils.isEmpty(addressUser.getText())) {
+                    addressUser.setError("Vui lòng nhập địa chỉ của bạn.");
+                } else if (TextUtils.isEmpty(phoneUser.getText())) {
+                    phoneUser.setError("Vui lòng nhập số điện thoại của bạn.");
+                } else if (!TextUtils.isDigitsOnly(phoneUser.getText())) {
+                    phoneUser.setError("Số điện thoại không hợp lệ");
+                } else {
+                    CreateBill();
+                    setResult(255);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 1000); // 5000ms delay
+                }
             }
         });
     }
@@ -106,7 +117,7 @@ public class Pay extends AppCompatActivity {
     public void CreateBill() {
 
         final DocumentReference doc = fStore.collection("bills").document();
-            Log.d("TAG", "ID Bill: " +doc.getId());
+        Log.d("TAG", "ID Bill: " + doc.getId());
         final Map<String, Object> inforBill = new HashMap<>();
         inforBill.put("time", Calendar.getInstance().getTime());
         inforBill.put("nameCustomer", nameUser.getText().toString());
@@ -135,10 +146,10 @@ public class Pay extends AppCompatActivity {
                         Map<String, Object> item = new HashMap<>();
 
                         item.put("name", document.get("name"));
-                        item.put("size",document.get("size"));
-                        item.put("amount",document.get("amount"));
-                        item.put("price",document.get("price"));
-                        item.put("image",document.get("image"));
+                        item.put("size", document.get("size"));
+                        item.put("amount", document.get("amount"));
+                        item.put("price", document.get("price"));
+                        item.put("image", document.get("image"));
 
                         historyRef.document(doc.getId())
                                 .collection(doc.getId())
@@ -147,25 +158,25 @@ public class Pay extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "[User History] User ID: "+ userId + " them sp: " + document.getId() + "vao Database");
+                                        Log.d("TAG", "[User History] User ID: " + userId + " them sp: " + document.getId() + "vao Database");
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("TAG", "Loi them sp vao csdl: " +e);
-                                    }
-                                });
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("TAG", "Loi them sp vao csdl: " + e);
+                            }
+                        });
 
                         addRef.document(doc.getId()).collection(doc.getId()).document(document.getId()).set(item).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("TAG", "[Database] User ID: "+ userId + " them sp: " + document.getId() + "vao Database");
+                                Log.d("TAG", "[Database] User ID: " + userId + " them sp: " + document.getId() + "vao Database");
                                 cartRef.document(document.getId()).delete();
                             }
-                        }). addOnFailureListener(new OnFailureListener() {
+                        }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.d("TAG", "Loi them sp vao csdl: " +e);
+                                Log.d("TAG", "Loi them sp vao csdl: " + e);
                             }
                         });
                     }
@@ -209,11 +220,11 @@ public class Pay extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for(QueryDocumentSnapshot snapshot : task.getResult()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
                         total += (Long.valueOf(snapshot.get("amount").toString()) * Long.valueOf(snapshot.get("price").toString()));
-                        Locale locale = new Locale("vn","VN");
+                        Locale locale = new Locale("vn", "VN");
                         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-                        totalPrice.setText("Tổng tiền: "+ currencyFormatter.format(total));
+                        totalPrice.setText("Tổng tiền: " + currencyFormatter.format(total));
                     }
                 }
             }
@@ -257,6 +268,6 @@ public class Pay extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

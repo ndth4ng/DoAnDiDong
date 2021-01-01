@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,19 +25,30 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
-    FirebaseAuth fAuth;
+
     Button btnLogin;
     Button btnRegister;
     EditText edtEmail, edtPassword;
     TextView tvReset;
+
+    FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in);
 
         AnhXa();
+
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        final FirebaseUser user = fAuth.getCurrentUser();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +90,7 @@ public class Login extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(),Register.class), 111);
+                    startActivityForResult(new Intent(getApplicationContext(), Register.class), 111);
             }
         });
 
@@ -137,6 +149,11 @@ public class Login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 111 & resultCode == Activity.RESULT_OK) {
             setResult(Activity.RESULT_OK);
+            finish();
+        }
+
+        if (requestCode == 111 & resultCode == Activity.RESULT_CANCELED) {
+            setResult(Activity.RESULT_CANCELED);
             finish();
         }
     }

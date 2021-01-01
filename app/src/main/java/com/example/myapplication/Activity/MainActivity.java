@@ -119,11 +119,13 @@ public class MainActivity extends AppCompatActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!currentUser.isAnonymous()) {
-                    startActivityForResult(new Intent(getApplicationContext(), User.class), 321);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                } else {
-                    startActivityForResult(new Intent(getApplicationContext(),Login.class), 111);
+                if (currentUser != null) {
+                    if (!currentUser.isAnonymous()) {
+                        startActivityForResult(new Intent(getApplicationContext(), User.class), 321);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    } else {
+                        startActivityForResult(new Intent(getApplicationContext(), Login.class), 111);
+                    }
                 }
             }
         });
@@ -349,5 +351,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFragment(int itemID) {
         viewPager.setCurrentItem(itemID);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("lifecycle","onStart invoked");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("lifecycle","onResume invoked");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("lifecycle","onPause invoked");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("lifecycle","onStop invoked");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("lifecycle","onRestart invoked");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("lifecycle","onDestroy invoked");
     }
 }

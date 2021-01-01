@@ -75,12 +75,16 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
             btnPay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (currentUser.isAnonymous()) {
-                        startActivityForResult(new Intent(getContext(), Login.class), 111);
+                    if (cartAdapter.getItemCount() != 0) {
+                        if (currentUser.isAnonymous()) {
+                            startActivityForResult(new Intent(getContext(), Login.class), 111);
+                        } else {
+                            Intent i = new Intent(getActivity(), Pay.class);
+                            startActivityForResult(i, REQUEST_CODE_BADGE);
+                            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        }
                     } else {
-                        Intent i = new Intent(getActivity(), Pay.class);
-                        startActivityForResult(i, REQUEST_CODE_BADGE);
-                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        Toast.makeText(getContext(),"Giỏ hàng đang trống",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
