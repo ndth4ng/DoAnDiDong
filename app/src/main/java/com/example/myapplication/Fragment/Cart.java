@@ -163,8 +163,6 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
                 ((MainActivity) getActivity()).getBadge();
             }
         }, 200); // 5000ms delay
-
-
     }
 
     @Override

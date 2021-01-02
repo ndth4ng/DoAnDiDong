@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -148,9 +150,27 @@ public class Search extends Fragment implements SearchAdapter.OnItemListener {
         });
     }
 
+    void resetBadge() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity) getActivity()).getBadge();
+            }
+        }, 200); // 5000ms delay
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         search.requestFocus();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_BADGE && resultCode == Activity.RESULT_OK) {
+            resetBadge();
+        }
     }
 }

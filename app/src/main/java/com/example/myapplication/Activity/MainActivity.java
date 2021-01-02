@@ -98,10 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         actionToolBar();
 
-        if (savedInstanceState == null) {
+        /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new Home()).commit();
-        }
+        }*/
+
         //layoutParams = (CoordinatorLayout.LayoutParams) bottomNav.getLayoutParams();
         //layoutParams.setBehavior(new BottomNavigationBehaviour());
 

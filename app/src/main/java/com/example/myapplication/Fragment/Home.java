@@ -44,9 +44,9 @@ public class Home extends Fragment implements ItemAdapter.OnItemListener {
     public void getList() {
         itemList = new ArrayList<>();
 
-        itemList.add(new Item("Áo",R.drawable.ao));
-        itemList.add(new Item("Quần",R.drawable.quan));
-        itemList.add(new Item("Phụ kiện",R.drawable.vo));
+        itemList.add(new Item("Áo",R.drawable.cate_ao));
+        itemList.add(new Item("Quần",R.drawable.cate_quan));
+        itemList.add(new Item("Phụ kiện",R.drawable.cate_acces));
 
         mAdapter = new ItemAdapter(getContext(), itemList, this);
 
