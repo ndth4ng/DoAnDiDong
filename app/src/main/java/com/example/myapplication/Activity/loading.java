@@ -37,32 +37,33 @@ public class loading extends AppCompatActivity {
             showCustomDialog();
         } else {
 
+
+            fAuth = FirebaseAuth.getInstance();
+            fStore = FirebaseFirestore.getInstance();
+
+
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    fAuth = FirebaseAuth.getInstance();
-                    fStore = FirebaseFirestore.getInstance();
-
-                    currentUser = fAuth.getCurrentUser();
-
-                }
-            }, 500); // 5000ms delay
-
-            if (currentUser == null) {
-                fAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("TAG", "signInAnonymously:success");
-                            currentUser = fAuth.getCurrentUser();
-                            Log.d("TAG", "signInAnonymously: " + currentUser.getUid());
-                        } else {
-                            Log.d("TAG", "signInAnonymously:fail");
-                        }
+                    if (currentUser == null) {
+                        fAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("TAG", "signInAnonymously:success");
+                                    currentUser = fAuth.getCurrentUser();
+                                    Log.d("TAG", "signInAnonymously: " + currentUser.getUid());
+                                } else {
+                                    Log.d("TAG", "signInAnonymously:fail");
+                                }
+                            }
+                        });
                     }
-                });
-            }
+                    currentUser = fAuth.getCurrentUser();
+                }
+            }, 500); // 500ms delay
+
 
             handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -71,7 +72,7 @@ public class loading extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
-            }, 1000); // 5000ms delay
+            }, 1000); // 1000ms delay
         }
     }
 
@@ -83,8 +84,7 @@ public class loading extends AppCompatActivity {
 
         if ((wifiCon != null && wifiCon.isConnected()) || (mobileCon != null & mobileCon.isConnected())) {
             return true;
-        }
-        else
+        } else
             return false;
     }
 
