@@ -37,10 +37,17 @@ public class loading extends AppCompatActivity {
             showCustomDialog();
         } else {
 
-            fAuth = FirebaseAuth.getInstance();
-            fStore = FirebaseFirestore.getInstance();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fAuth = FirebaseAuth.getInstance();
+                    fStore = FirebaseFirestore.getInstance();
 
-            currentUser = fAuth.getCurrentUser();
+                    currentUser = fAuth.getCurrentUser();
+
+                }
+            }, 500); // 5000ms delay
 
             if (currentUser == null) {
                 fAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -57,7 +64,7 @@ public class loading extends AppCompatActivity {
                 });
             }
 
-            Handler handler = new Handler();
+            handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
