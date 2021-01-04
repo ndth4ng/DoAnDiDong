@@ -40,7 +40,11 @@ public class CartAdapter extends FirestoreRecyclerAdapter<CartItem, CartAdapter.
     protected void onBindViewHolder(@NonNull final CartItemViewHolder holder, int position, @NonNull final CartItem model) {
         holder.nameProduct.setText(model.getName());
 
-        Picasso.get().load(model.getImage()).resize(450,500).centerCrop().into(holder.imgProduct);
+        if (!model.getImage().equals("")) {
+            Picasso.get().load(model.getImage()).resize(450, 500).centerCrop().into(holder.imgProduct);
+        } else {
+            Picasso.get().load(R.drawable.error).resize(450, 500).centerCrop().into(holder.imgProduct);
+        }
 
         Locale locale = new Locale("vn","VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);

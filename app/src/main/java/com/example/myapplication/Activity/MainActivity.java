@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(itemID);
     }
 
-    @Override
+   /* @Override
     protected void onStart() {
         super.onStart();
         Log.d("lifecycle","onStart invoked");
@@ -383,5 +383,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d("lifecycle","onDestroy invoked");
-    }
+    }*/
 }

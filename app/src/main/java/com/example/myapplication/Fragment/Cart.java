@@ -35,9 +35,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -52,6 +54,8 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
     CartAdapter cartAdapter;
     String userId;
     Button btnPay;
+
+    List<CartItem> listCart;
 
     private static final int REQUEST_CODE_BADGE = 300;
 
@@ -92,9 +96,34 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         return view;
     }
 
+    private List<CartItem> getCart() {
+        listCart = new ArrayList<>();
+        fStore.collection("users").document(userId).collection("Cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        CartItem item = new CartItem();
+                        item.setItemId(snapshot.getId());
+                        item.setAmount(Long.valueOf(snapshot.get("amount").toString()));
+                        item.setSize(snapshot.get("size").toString());
+                        item.setPrice(Long.valueOf(snapshot.get("price").toString()));
+                        item.setImage(snapshot.get("image").toString());
+                        item.setName(snapshot.get("name").toString());
+                        listCart.add(item);
+                    }
+                }
+            }
+        });
+
+        return  listCart;
+    }
+
     public void getList() {
         if (userId != null) {
             Query query = fStore.collection("users").document(userId).collection("Cart");
+
+
 
             FirestoreRecyclerOptions<CartItem> options = new FirestoreRecyclerOptions.Builder<CartItem>()
                     .setLifecycleOwner(this)
@@ -102,10 +131,11 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
                         @NonNull
                         @Override
                         public CartItem parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                            //Product product = snapshot.toObject(Product.class);
+
                             CartItem cartItem = snapshot.toObject(CartItem.class);
                             String itemId = snapshot.getId();
                             cartItem.setItemId(itemId);
+
                             return cartItem;
                         }
                     })
@@ -145,7 +175,6 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
 
                 i.putExtra("Product", product);
                 startActivityForResult(i, REQUEST_CODE_BADGE);
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -185,6 +214,7 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         }
     }
 
+
     @Override
     public void onDelClick(CartItem snapshot, int position) {
         fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Cart").document(snapshot.getItemId()).delete();
@@ -198,4 +228,5 @@ public class Cart extends Fragment implements CartAdapter.OnListItemClick {
         //Toast.makeText(getActivity(), "Product ID:" + snapshot.getItemId(), Toast.LENGTH_SHORT).show();
         ((MainActivity) getActivity()).getBadge();
     }
+
 }

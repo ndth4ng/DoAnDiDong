@@ -82,13 +82,13 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
         final String type = getType();
         final String cate = getCate();
 
-       /* fStore.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        /*fStore.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map<String, Object> doc = new HashMap<>();
-                        doc.put("id",document.getId());
+                        doc.put("itemId",document.getId());
                         doc.put("name",document.get("name").toString());
                         doc.put("price",document.get("price").toString());
                         doc.put("image",document.get("image").toString());
@@ -148,7 +148,7 @@ public class Categories extends AppCompatActivity implements FirestoreAdapter.On
                                     //Log.d("TAG","Product type1: "+ jsonObject.getString("type"));
                                     if (jsonObject.getString("type").equals(type) || jsonObject.getString("cate").equals(cate)) {
                                         Log.d("TAG","Object name: " + jsonObject.getString("name"));
-                                        Product product = new Product(jsonObject.getString("id"), jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getInt("price"));
+                                        Product product = new Product(jsonObject.getString("itemId"), jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getInt("price"));
                                         productList.add(product);
                                     }
                                 }

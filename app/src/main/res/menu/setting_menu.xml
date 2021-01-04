@@ -10,4 +10,9 @@
         android:id="@+id/changePassword"
         android:title="@string/change_password"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/contact"
+        android:title="@string/contact"
+        app:showAsAction="never"/>
 </menu>

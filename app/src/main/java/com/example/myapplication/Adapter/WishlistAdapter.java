@@ -36,7 +36,11 @@ public class WishlistAdapter extends FirestoreRecyclerAdapter<Product, WishlistA
         holder.priceProduct.setText(currencyFormatter.format(model.getPrice()));
         holder.detailProduct.setText(model.getDetail());
 
-        Picasso.get().load(model.getImage()).resize(450,500).centerCrop().into(holder.imgProduct);
+        if (!model.getImage().equals("")) {
+            Picasso.get().load(model.getImage()).resize(450, 500).centerCrop().into(holder.imgProduct);
+        } else {
+            Picasso.get().load(R.drawable.error).resize(450, 500).centerCrop().into(holder.imgProduct);
+        }
     }
 
     @NonNull

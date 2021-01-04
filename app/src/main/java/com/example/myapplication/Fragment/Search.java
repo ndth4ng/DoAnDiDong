@@ -86,7 +86,7 @@ public class Search extends Fragment implements SearchAdapter.OnItemListener {
                                     JSONObject jsonObject = hits.getJSONObject(i);
                                     //Log.d("TAG","Product type1: "+ jsonObject.getString("type"));
                                     Log.d("TAG", "Object name: " + jsonObject.getString("name"));
-                                    Product product = new Product(jsonObject.getString("id"), jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getInt("price"));
+                                    Product product = new Product(jsonObject.getString("itemId"), jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getInt("price"));
                                     productList.add(product);
                                 }
 

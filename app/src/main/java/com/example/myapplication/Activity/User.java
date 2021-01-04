@@ -2,10 +2,12 @@ package com.example.myapplication.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -138,10 +144,22 @@ public class User extends AppCompatActivity {
                 // Cập nhật mật khẩu
                 startActivity(new Intent(getApplicationContext(), UpdatePassword.class));
                 break;
+
+            case R.id.contact:
+                contact();
             default:
                 // ...
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void contact() {
+        final AlertDialog.Builder contactDialog = new AlertDialog.Builder(User.this);
+        contactDialog.setTitle("Liên hệ");
+        contactDialog.setMessage("Tú Don't Care - tu12d3@gmail.com  \n ft. \n Dr. Thanh - test@gmail.com \n ft. \n ThắngEEEE - thangxacam@gmail.com")
+                .setCancelable(true);
+
+        contactDialog.create().show();
     }
 
 
